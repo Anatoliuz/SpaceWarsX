@@ -8,35 +8,29 @@ using namespace cocos2d;
 
 class GameLayer : public cocos2d::CCLayer
 {
+private:
+    GameSprite * player1;
+    GameSprite * player2;
+    GameSprite * ball;
+
+    CCArray* players;
+
+    CCSize screenSize;
+
+
 public:
     ~GameLayer();
-    virtual bool init();
-    static CCScene *createScene();
-    void menuCloseCallback(cocos2d::Ref* pSender);
+    static Scene* scene();
 
-    CREATE_FUNC(GameLayer);
+   virtual bool init();
+   void menuCloseCallback(Ref* pSender);
 
-    //virtual void ccTouchesBegan(CCSet* pTouches,
-                              //  CCEvent* event);
-    //virtual void ccTouchesMoved(CCSet* pTouches,
-                               // CCEvent* event);
-    //virtual void ccTouchesEnded(CCSet* pTouches,
-                                //CCEvent* event);
-      void update(float dt);
+   CREATE_FUNC(GameLayer);
+  // virtual void ccTouchesBegan(CCSet* pTouches, CCEvent* event);
+  // virtual void ccTouchesMoved(CCSet* pTouches, CCEvent* event);
 
-private:
-    GameSprite * _player1;
-    GameSprite * _player2;
-    GameSprite * _player3_ball;
-
-    CCArray * _players;
-    CCLabelTTF * _player1ScoreLabel;
-    CCLabelTTF * _player2ScoreLabel;
-
-    CCSize _screenSize;
-    int _player1Score;
-    int _player2Score;
-    void playerScore(int player);
+  // virtual void ccTouchEnded(CCSet* pTouches, CCEvent* event);
+   void update(float dt);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

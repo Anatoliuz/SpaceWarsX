@@ -2,7 +2,10 @@
 
 
 GameSprite::GameSprite(void){
-    _vector = ccp(0,0);
+
+     _vector = ccp(0,0);
+
+
 }
 
 GameSprite::~GameSprite(){

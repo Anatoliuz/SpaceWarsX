@@ -40,7 +40,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("SpaceWarsX", Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect("SpaceWarsX", Rect(0, 0, mediumResolutionSize.width, mediumResolutionSize.height));
 #else
         glview = GLViewImpl::create("SpaceWarsX");
 #endif
@@ -75,11 +75,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = GameLayer::createScene();
-
+   //auto scene = GameLayer::createScene();
     // run
-    director->runWithScene(scene);
+  //  director->runWithScene(scene);
+    auto scene = GameLayer::scene();
 
+    // add the layer
+
+    // run the first scene
+    director->runWithScene(scene);
     return true;
 }
 

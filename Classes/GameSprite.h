@@ -9,7 +9,6 @@ public:
    CC_SYNTHESIZE(CCPoint, _nextPosition, NextPosition);
    CC_SYNTHESIZE(CCPoint, _vector, Vector);
    CC_SYNTHESIZE(CCPoint *, _touch, Touch);
-
     GameSprite(void);
     ~GameSprite(void);
 
@@ -19,6 +18,7 @@ public:
     // a selector callback
     float radius();
     // implement the "static create()" method manually
+
 };
 
 #endif // __HELLOWORLD_SCENE_H__
