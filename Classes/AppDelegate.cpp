@@ -1,13 +1,12 @@
 #include "AppDelegate.h"
-#include "GameLayer.h"
+#include "HelloWorldScene.h"
 
 USING_NS_CC;
-
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
+static cocos2d::Size airResolutionSize = cocos2d::Size(1440, 900);
+static cocos2d::Size designResolutionSize = cocos2d::Size(1440, 900);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
-
 AppDelegate::AppDelegate() {
 
 }
@@ -36,19 +35,20 @@ static int register_all_packages()
 
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
+  
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("SpaceWarsX", Rect(0, 0, mediumResolutionSize.width, mediumResolutionSize.height));
+        glview = GLViewImpl::createWithRect("space", Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        glview = GLViewImpl::create("SpaceWarsX");
+        glview = GLViewImpl::create("space");
 #endif
         director->setOpenGLView(glview);
     }
 
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
@@ -75,15 +75,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-   //auto scene = GameLayer::createScene();
+    auto scene = HelloWorld::createScene();
+
     // run
-  //  director->runWithScene(scene);
-    auto scene = GameLayer::scene();
-
-    // add the layer
-
-    // run the first scene
     director->runWithScene(scene);
+
     return true;
 }
 
