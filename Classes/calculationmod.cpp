@@ -6,7 +6,7 @@ using namespace std;
 
 calculationMod::calculationMod()
 {
-
+    
 }
 
 void calculationMod::doStep(planet* massOfPlanets, int n){
@@ -21,13 +21,13 @@ void calculationMod::moveAllUnits(planet* massOfPlanets, int n){
 
 void calculationMod::moveAllUnitsOnPlanet(planet &onePlanet){
     sector **massOfSectors = onePlanet.getMassOfSectors();
-
+    
     for (int i = 0; i < 5; i++){
         for (int j = 0; j < 8; j++){
             bool teamFlag = true;   // true для первого игрока
             list<unit> &listOfUnits1 = massOfSectors[i][j].getListOfUnits1();
             moveUnitsInList(listOfUnits1, massOfSectors, i , j, teamFlag);
-
+            
             teamFlag = false;       // false для второго игрока
             list<unit> &listOfUnits2 = massOfSectors[i][j].getListOfUnits2();
             moveUnitsInList(listOfUnits2, massOfSectors, i , j, teamFlag);
@@ -45,23 +45,23 @@ void calculationMod::moveUnitsInList(list<unit> &currentListOfUnits, sector **ma
         else
         {
             switch (oneOfUnits->getMoveType()) {
-            case standartMove:{
-                double diff_X = massOfSectors[i][j].getDifference_X();
-                double diff_Y = massOfSectors[i][j].getDifference_Y();
-                moveStandartUnit(*oneOfUnits, diff_X, diff_Y, teamFlag);
-                break;
+                case standartMove:{
+                    double diff_X = massOfSectors[i][j].getDifference_X();
+                    double diff_Y = massOfSectors[i][j].getDifference_Y();
+                    moveStandartUnit(*oneOfUnits, diff_X, diff_Y, teamFlag);
+                    break;
+                }
+                default:
+                    break;
             }
-            default:
-                break;
-            }
-
+            
             if (oneOfUnits->isSectorChange()){
                 addToNextSector(*oneOfUnits, massOfSectors, i, j, teamFlag);
-                currentListOfUnits.erase(oneOfUnits);
+                oneOfUnits = currentListOfUnits.erase(oneOfUnits);
                 oneOfUnits--;
             }
         }
-
+        
         oneOfUnits++;
     }
 }
@@ -86,7 +86,7 @@ void calculationMod::addToNextSector(unit &oneUnit, sector **massOfSectors, int 
     oneUnit.clearCountSectorChange();
     int indexOfNextSector = 0;
     indexOfNextSector = getIndexOfNextSector(oneUnit, j, teamFlag);
-
+    
     if (teamFlag){
         list<unit> &nextListOfUnits = massOfSectors[i][indexOfNextSector].getListOfUnits1();
         nextListOfUnits.push_back(oneUnit);
@@ -100,7 +100,7 @@ void calculationMod::addToNextSector(unit &oneUnit, sector **massOfSectors, int 
 
 int calculationMod::getIndexOfNextSector(unit &oneUnit, int indexOfSector, bool teamFlag){
     int indexOfNextSector = 0;
-
+    
     if (teamFlag){
         if (indexOfSector == 7){
             indexOfNextSector = 0;
@@ -122,6 +122,6 @@ int calculationMod::getIndexOfNextSector(unit &oneUnit, int indexOfSector, bool 
             indexOfNextSector = indexOfSector - 1;
         }
     }
-
+    
     return indexOfNextSector;
 }

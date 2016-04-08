@@ -1,8 +1,16 @@
 #include "unit.h"
 #include <iostream>
 
-using namespace std;
 
+void unit::set_dt(float new_dt){
+    dt = new_dt;
+}
+float unit::get_dt(){
+    return dt;
+}
+coordinate_X_Y unit::get_unit_coordinates(){
+    return coordinate;
+}
 
 unit::unit()
 {
@@ -11,10 +19,12 @@ unit::unit()
 
 unit::unit(double X, double Y)
 {
+    width = 25;
+    height = 50;
     health = 100;
-    speed = 500;
+    speed = 100;
     damage = 35;
-
+    
     coordinate.x = X;
     coordinate.y = Y;
 
@@ -60,6 +70,14 @@ moveType unit::getMoveType(){
 
 // Вывод координат в консоль (для отладки)
 void unit::writeCoordinates(){
-    cout << coordinate.x << " " << coordinate.y << "\n";
+    //cout << coordinate.x << " " << coordinate.y << "\n";
 }
 
+//размер юнита(высота)
+int unit::get_unit_height(){
+    return height;
+}
+//размер юнита (ширина)
+int unit::get_unit_width(){
+    return width;
+}

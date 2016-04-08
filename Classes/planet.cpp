@@ -1,30 +1,29 @@
 #include "planet.h"
-#include <math.h>
 
-using namespace cocos2d;
-
-
-planet* planet::create(){
-    planet * sprite = new planet();
-    if (sprite->initWithFile("planet.png")) {
-        sprite->autorelease();
-        return sprite;
-    }
-    CC_SAFE_DELETE(sprite);
-    return NULL;
+void planet::set_dt(float new_dt){
+    dt = new_dt;
 }
+
+float planet::get_dt(){
+    return dt;
+}
+coordinate_X_Y planet::get_planet_coordinates(){
+    return coordinate;
+}
+double planet::get_planet_radius(){
+    return radiusOfPlanet;
+}
+
 planet::planet()
 {
-    //1000 пикселей это 80 процентов экрана, поэтому сделал меньше
     radiusOfPlanet = 100;
     radiusOfOrbit = 20;
     //размер экрана
-    CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-
+    cocos2d::CCSize win_size = cocos2d::CCDirector::sharedDirector()->getWinSize();
+    
     //   координаты в центре
     coordinate.x = win_size.width/2;
     coordinate.y = win_size.height/2;
-
 
     double straightLine = radiusOfPlanet - radiusOfOrbit / 2;
     double diagonal = straightLine / sqrt(2);
@@ -66,13 +65,6 @@ planet::planet()
     // Отладочные юниты
     massOfSectors[0][0].createUnit1();
     massOfSectors[0][0].createUnit2();
-}
-
-coordinate_X_Y planet::get_planet_coordinates(){
-    return coordinate;
-}
-double planet::get_planet_radius(){
-    return radiusOfPlanet;
 }
 
 sector** planet::getMassOfSectors(){

@@ -1,19 +1,18 @@
 #ifndef UNIT_H
 #define UNIT_H
-
-#include <coordinate_x_y.h>
-#include <movetype.h>
-#include <attacktype.h>
-#include "cocos2d.h"
-//class unit: public cocos2d::Sprite{
+#include "coordinate_x_y.h"
+#include "movetype.h"
+#include "attacktype.h"
 
 class unit{
 
 public:
     unit();
     unit(double X, double Y);   // Конструктор создаёт юнит на координатах X и Y
-
-
+    
+    void set_dt(float);
+    float get_dt();
+    
     void changeCoordinate(double X, double Y);   // Увеличивает координаты юнита на X и Y соответственно
 
     bool isSectorChange();   // Возвращает true, если юнит должен сменить сектор
@@ -27,11 +26,19 @@ public:
     moveType getMoveType();
 
     void writeCoordinates();   // Вывод координат в консоль (для отладки)
+    int get_unit_height();
+    int get_unit_width();
 
+    coordinate_X_Y get_unit_coordinates();
 private:
+    float dt;
+    
     int health;   // Жизни
     int damage;   // Урон
     int speed;    // Скорость
+    
+    int height;    //размер юнита (высота)
+    int width;    //размер юнита (ширина)
 
     coordinate_X_Y coordinate;   // Координаты
     moveType unitMoveType;       // Тип движения

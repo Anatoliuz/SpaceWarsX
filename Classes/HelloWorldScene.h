@@ -2,9 +2,11 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-#include "Rocket.h"
-#include "planet.h"
+#include "sector.h"
+#include "calculationmod.h"
 #include "coordinate_x_y.h"
+#include "Planet_Sprite.hpp"
+#include "Unit_Sprite.hpp"
 enum {
     kBackground,
     kMiddleground,
@@ -29,11 +31,11 @@ typedef enum gamestates {
 class HelloWorld : public cocos2d::Layer
 {
 public:
-    //Rocket* _rocket;
-    planet* _planet;
+    Planet_Sprite* planet_sprite;
+    Unit_Sprite* unit_sprite;
+    planet *massOfPlanets;
     static cocos2d::Scene* createScene();
     void update(float) override;
-
     virtual bool init();
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);

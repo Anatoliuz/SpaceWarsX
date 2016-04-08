@@ -1,5 +1,4 @@
 #include "HelloWorldScene.h"
-
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -69,15 +68,36 @@ bool HelloWorld::init()
     auto space = Sprite::create("space.png");
     space->setPosition(Vec2(screenSize.width/2, screenSize.height/2));
     this->addChild(space, kBackground);
-    
-    _planet = planet::create();
-    coordinate_X_Y planet_coord = _planet->get_planet_coordinates();
-    _planet->setPosition(Vec2(planet_coord.x,planet_coord.y));
-    _planet->setScaleX(_planet->get_planet_radius()/_planet->getContentSize().width);
-    _planet->setScaleY(_planet->get_planet_radius()/_planet->getContentSize().height);
-    this->addChild(_planet, kMiddleground);
+    planet_sprite = Planet_Sprite::create();
+    this->addChild(planet_sprite, kMiddleground);
+
+    planet_sprite = Planet_Sprite::create();
+    int num_of_planets = 1;
+    massOfPlanets = new planet[num_of_planets];
+    massOfPlanets[0] = *(planet_sprite->planet_in_sprite);
+        
+    sector **rockets_to_print = massOfPlanets->getMassOfSectors();
+    rockets_to_print[0][0];
+    for (int i = 0; i < 20; i++){
+       
+        
+        // Остановка времени на 0.1 секунду (между рендерами)
+        // За рендер он будет делать достаточно большой рывок (мне так надо было для отладки)
+        // Фиксится изменение параметра speed с 500 на 20 или 10 в конструкторе юнита (он находится в unit.cpp)
+        //usleep (100000);
+    }
+  //  _planet = planet::create();
+//    coordinate_X_Y planet_coord = _planet->get_planet_coordinates();
+//    _planet->setPosition(Vec2(planet_coord.x,planet_coord.y));
+//    _planet->setScaleX(_planet->get_planet_radius()/_planet->getContentSize().width);
+//    _planet->setScaleY(_planet->get_planet_radius()/_planet->getContentSize().height);
+//    this->addChild(_planet, kMiddleground);
     this->scheduleUpdate();
 
+
+
+    
+    
 //
    // coordinate_X_Y planet_coordinate = planet::get_planet_coordinates();
    // _planet->setPosition(planet_coordinate.x, planet_coordinate.y);
@@ -85,13 +105,17 @@ bool HelloWorld::init()
 
     return true;
 }
-
+//delta позволяет  сгладить резкозть движения объектов в loop'e
 void HelloWorld::update(float delta){
-    auto position = _planet->getPosition();
-    position.x -= 250 * delta;
-    if (position.x  < 0 - (_planet->getBoundingBox().size.width / 2))
-        position.x = this->getBoundingBox().getMaxX() + _planet->getBoundingBox().size.width/2;
-    _planet->setPosition(position);
+    int num_of_planets = 1;
+    calculationMod calculator;
+    calculator.doStep(massOfPlanets, num_of_planets);
+    
+//    auto position = _planet->getPosition();
+//    position.x -= 250 * delta;
+//    if (position.x  < 0 - (_planet->getBoundingBox().size.width / 2))
+//        position.x = this->getBoundingBox().getMaxX() + _planet->getBoundingBox().size.width/2;
+//    _planet->setPosition(position);
 }
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {

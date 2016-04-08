@@ -2,8 +2,8 @@
 #define CALCULATIONMOD_H
 
 #include <vector>
-#include <planet.h>
-#include <unit.h>
+#include "planet.h"
+#include "unit.h"
 
 class calculationMod
 {
