@@ -1,6 +1,10 @@
 #include "sector.h"
 
 
+sector::sector()
+{
+
+}
 
 sector::sector(double coord_X, double coord_Y, double diff_X, double diff_Y)
 {
@@ -23,12 +27,12 @@ void sector::changeCoordinates(double start_X, double start_Y, double finish_X, 
 }
 
 void sector::createUnit1(){
-    Rocket newUnit(start.x, start.y);
+    unit newUnit(start.x, start.y);
     listOfUnits1.push_back(newUnit);
 }
 
 void sector::createUnit2(){
-    Rocket newUnit(finish.x, finish.y);
+    unit newUnit(finish.x, finish.y);
     listOfUnits2.push_back(newUnit);
 }
 
@@ -40,10 +44,10 @@ double sector::getDifference_Y(){
     return differecne_Y;
 }
 
-list<Rocket>& sector::getListOfUnits1(){
+list<unit>& sector::getListOfUnits1(){
     return listOfUnits1;
 }
 
-list<Rocket>& sector::getListOfUnits2(){
+list<unit>& sector::getListOfUnits2(){
     return listOfUnits2;
 }

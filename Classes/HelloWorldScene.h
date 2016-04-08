@@ -2,10 +2,8 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-#include "SimpleAudioEngine.h"
 #include "Rocket.h"
 #include "planet.h"
-#include "MySprite.hpp"
 enum {
     kBackground,
     kMiddleground,
@@ -30,15 +28,14 @@ typedef enum gamestates {
 class HelloWorld : public cocos2d::Layer
 {
 public:
-    Rocket* _rocket;
+    //Rocket* _rocket;
     planet* _planet;
-    MySprite* _mySprite;
     static cocos2d::Scene* createScene();
 
     virtual bool init();
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
-    CC_SYNTHESIZE(Size, _screenSize, set_size);
+    CC_SYNTHESIZE(cocos2d::Size, _screenSize, set_size);
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 };

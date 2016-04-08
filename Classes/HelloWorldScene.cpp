@@ -1,4 +1,5 @@
 #include "HelloWorldScene.h"
+
 USING_NS_CC;
 
 Scene* HelloWorld::createScene()
@@ -62,29 +63,21 @@ bool HelloWorld::init()
     // add the label as a child to this layer
     this->addChild(label, 1);
     // add "HelloWorld" splash screen"
-   // auto sprite = Sprite::create("rocket.png");
-    
-    // position the sprite on the center of the screen
 
-  //  sprite->setPosition(0, 0);
     // add the sprite as a child to this layer
     
     auto space = Sprite::create("space.png");
     space->setPosition(Vec2(screenSize.width/2, screenSize.height/2));
     this->addChild(space, kBackground);
     
-  // _planet = planet::create();
+    _planet = planet::create();
+    _planet->setPosition(Vec2(screenSize.width/2, screenSize.height/2));
+    this->addChild(_planet, kMiddleground);
+//
    // coordinate_X_Y planet_coordinate = planet::get_planet_coordinates();
    // _planet->setPosition(planet_coordinate.x, planet_coordinate.y);
    // this->addChild(_mySprite, kMiddleground);
 
-//    _mySprite = MySprite::create();
-//    _mySprite->setPosition(Vec2(screenSize.width/2, screenSize.height/2));
-//    this->addChild(_mySprite, kMiddleground);
- 
-//    _planet_2 = planet_2::create();
-//    _planet_2->setPosition(Vec2(screenSize.width/2, screenSize.height/2));
-//    this->addChild(_planet_2, kMiddleground);
     return true;
 }
 

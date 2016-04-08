@@ -2,7 +2,7 @@
 #define SECTOR_H
 
 #include <list>
-#include "Rocket.h"
+#include <unit.h>
 
 using namespace std;
 
@@ -20,8 +20,8 @@ public:
 
     double getDifference_X();
     double getDifference_Y();
-    list<Rocket>& getListOfUnits1();
-    list<Rocket>& getListOfUnits2();
+    list<unit>& getListOfUnits1();
+    list<unit>& getListOfUnits2();
 
 private:
     coordinate_X_Y start;    // Координаты начала сектора
@@ -30,8 +30,8 @@ private:
     double differecne_X;   // Разница между коодинатой X начала и конца
     double differecne_Y;   // Разница между коодинатой Y начала и конца
 
-    list<Rocket> listOfUnits1;   // Список юнитов первого игрока
-    list<Rocket> listOfUnits2;   // Список юнитов второго игрока
+    list<unit> listOfUnits1;   // Список юнитов первого игрока
+    list<unit> listOfUnits2;   // Список юнитов второго игрока
 };
 
 #endif // SECTOR_H
