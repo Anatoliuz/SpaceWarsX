@@ -15,8 +15,9 @@ planet* planet::create(){
 }
 planet::planet()
 {
-    radiusOfPlanet = 1000;
-    radiusOfOrbit = 200;
+    //1000 пикселей это 80 процентов экрана, поэтому сделал меньше
+    radiusOfPlanet = 100;
+    radiusOfOrbit = 20;
     //размер экрана
     CCSize win_size = CCDirector::sharedDirector()->getWinSize();
 
@@ -67,7 +68,12 @@ planet::planet()
     massOfSectors[0][0].createUnit2();
 }
 
-
+coordinate_X_Y planet::get_planet_coordinates(){
+    return coordinate;
+}
+double planet::get_planet_radius(){
+    return radiusOfPlanet;
+}
 
 sector** planet::getMassOfSectors(){
     return massOfSectors;

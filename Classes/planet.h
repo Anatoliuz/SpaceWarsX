@@ -10,7 +10,8 @@ public:
     planet();   // Констуктор по умолчанию создает планету с координатами (0, 0)
     static planet* create();
     sector** getMassOfSectors();
-
+    double get_planet_radius();
+    coordinate_X_Y get_planet_coordinates();
 private:
     double radiusOfPlanet;       // Радиус планеты
     double radiusOfOrbit;        // Радиус ордиты

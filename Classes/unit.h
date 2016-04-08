@@ -4,6 +4,8 @@
 #include <coordinate_x_y.h>
 #include <movetype.h>
 #include <attacktype.h>
+#include "cocos2d.h"
+//class unit: public cocos2d::Sprite{
 
 class unit{
 

@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Rocket.h"
 #include "planet.h"
+#include "coordinate_x_y.h"
 enum {
     kBackground,
     kMiddleground,
@@ -31,6 +32,7 @@ public:
     //Rocket* _rocket;
     planet* _planet;
     static cocos2d::Scene* createScene();
+    void update(float) override;
 
     virtual bool init();
     // a selector callback

@@ -71,8 +71,13 @@ bool HelloWorld::init()
     this->addChild(space, kBackground);
     
     _planet = planet::create();
-    _planet->setPosition(Vec2(screenSize.width/2, screenSize.height/2));
+    coordinate_X_Y planet_coord = _planet->get_planet_coordinates();
+    _planet->setPosition(Vec2(planet_coord.x,planet_coord.y));
+    _planet->setScaleX(_planet->get_planet_radius()/_planet->getContentSize().width);
+    _planet->setScaleY(_planet->get_planet_radius()/_planet->getContentSize().height);
     this->addChild(_planet, kMiddleground);
+    this->scheduleUpdate();
+
 //
    // coordinate_X_Y planet_coordinate = planet::get_planet_coordinates();
    // _planet->setPosition(planet_coordinate.x, planet_coordinate.y);
@@ -81,7 +86,13 @@ bool HelloWorld::init()
     return true;
 }
 
-
+void HelloWorld::update(float delta){
+    auto position = _planet->getPosition();
+    position.x -= 250 * delta;
+    if (position.x  < 0 - (_planet->getBoundingBox().size.width / 2))
+        position.x = this->getBoundingBox().getMaxX() + _planet->getBoundingBox().size.width/2;
+    _planet->setPosition(position);
+}
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     Director::getInstance()->end();
