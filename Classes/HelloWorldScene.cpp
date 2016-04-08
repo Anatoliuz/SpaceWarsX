@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 USING_NS_CC;
+int num_of_planets = 1;
 
 Scene* HelloWorld::createScene()
 {
@@ -64,53 +65,74 @@ bool HelloWorld::init()
     // add "HelloWorld" splash screen"
 
     // add the sprite as a child to this layer
+   
     
+
     auto space = Sprite::create("space.png");
     space->setPosition(Vec2(screenSize.width/2, screenSize.height/2));
     this->addChild(space, kBackground);
+    
     planet_sprite = Planet_Sprite::create();
-    this->addChild(planet_sprite, kMiddleground);
+   this->addChild(planet_sprite, kMiddleground);
+//
+    unit_sprite_1 = Unit_Sprite::create();
+    unit_sprite_2 = Unit_Sprite::create();
 
-    planet_sprite = Planet_Sprite::create();
-    int num_of_planets = 1;
+   // this->addChild(unit_sprite, kMiddleground);
+
+    
     massOfPlanets = new planet[num_of_planets];
     massOfPlanets[0] = *(planet_sprite->planet_in_sprite);
-        
-    sector **rockets_to_print = massOfPlanets->getMassOfSectors();
-    rockets_to_print[0][0];
-    for (int i = 0; i < 20; i++){
-       
-        
-        // Остановка времени на 0.1 секунду (между рендерами)
-        // За рендер он будет делать достаточно большой рывок (мне так надо было для отладки)
-        // Фиксится изменение параметра speed с 500 на 20 или 10 в конструкторе юнита (он находится в unit.cpp)
-        //usleep (100000);
+    sector **rockets_to_print = massOfPlanets[0].getMassOfSectors();
+    std::list<unit> list_units_1 = rockets_to_print[0][0].getListOfUnits1();
+    std::list<unit> list_units_2 = rockets_to_print[0][0].getListOfUnits2();
+
+    while(!list_units_1.empty()) {
+        unit_sprite_1->set_unit_sprite(&list_units_1.front());
+        unit temp_unit =  list_units_1.front();
+        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+        unit_sprite_1->setPosition(Vec2(coords.x, coords.y));
+        list_units_1.pop_back();
+        this->addChild(unit_sprite_1, kMiddleground);
     }
-  //  _planet = planet::create();
-//    coordinate_X_Y planet_coord = _planet->get_planet_coordinates();
-//    _planet->setPosition(Vec2(planet_coord.x,planet_coord.y));
-//    _planet->setScaleX(_planet->get_planet_radius()/_planet->getContentSize().width);
-//    _planet->setScaleY(_planet->get_planet_radius()/_planet->getContentSize().height);
-//    this->addChild(_planet, kMiddleground);
+    while(!list_units_2.empty()) {
+        unit_sprite_2->set_unit_sprite(&list_units_2.front());
+        unit temp_unit =  list_units_2.front();
+        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+        unit_sprite_2->setPosition(Vec2(coords.x, coords.y));
+        list_units_2.pop_back();
+        this->addChild(unit_sprite_2, kMiddleground);
+    }
+
     this->scheduleUpdate();
-
-
-
-    
-    
-//
-   // coordinate_X_Y planet_coordinate = planet::get_planet_coordinates();
-   // _planet->setPosition(planet_coordinate.x, planet_coordinate.y);
-   // this->addChild(_mySprite, kMiddleground);
 
     return true;
 }
 //delta позволяет  сгладить резкозть движения объектов в loop'e
 void HelloWorld::update(float delta){
-    int num_of_planets = 1;
-    calculationMod calculator;
-    calculator.doStep(massOfPlanets, num_of_planets);
+//    int num_of_planets = 1;
+      calculationMod calculator;
+      calculator.doStep(massOfPlanets, num_of_planets);
+    sector **rockets_to_print = massOfPlanets[0].getMassOfSectors();
+    std::list<unit> list_units_1 = rockets_to_print[0][0].getListOfUnits1();
+    std::list<unit> list_units_2 = rockets_to_print[0][0].getListOfUnits2();
     
+    while(!list_units_1.empty()) {
+        unit_sprite_1->set_unit_sprite(&list_units_1.front());
+        unit temp_unit =  list_units_1.front();
+        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+        unit_sprite_1->setPosition(Vec2(coords.x, coords.y));
+        list_units_1.pop_back();
+        //this->addChild(unit_sprite_1, kMiddleground);
+    }
+    while(!list_units_2.empty()) {
+        unit_sprite_2->set_unit_sprite(&list_units_2.front());
+        unit temp_unit =  list_units_2.front();
+        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+        unit_sprite_2->setPosition(Vec2(coords.x, coords.y));
+        list_units_2.pop_back();
+        //this->addChild(unit_sprite_2, kMiddleground);
+    }
 //    auto position = _planet->getPosition();
 //    position.x -= 250 * delta;
 //    if (position.x  < 0 - (_planet->getBoundingBox().size.width / 2))

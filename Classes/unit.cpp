@@ -14,13 +14,14 @@ coordinate_X_Y unit::get_unit_coordinates(){
 
 unit::unit()
 {
-
+    std::cout << "ERROR: unimplemented unit() called" << std::endl;
 }
 
 unit::unit(double X, double Y)
 {
     width = 25;
     height = 50;
+    
     health = 100;
     speed = 100;
     damage = 35;

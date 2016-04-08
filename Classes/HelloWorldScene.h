@@ -32,7 +32,9 @@ class HelloWorld : public cocos2d::Layer
 {
 public:
     Planet_Sprite* planet_sprite;
-    Unit_Sprite* unit_sprite;
+    Unit_Sprite* unit_sprite_1;
+    Unit_Sprite* unit_sprite_2;
+
     planet *massOfPlanets;
     static cocos2d::Scene* createScene();
     void update(float) override;

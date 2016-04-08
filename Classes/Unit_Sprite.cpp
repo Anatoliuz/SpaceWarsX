@@ -7,6 +7,7 @@
 //
 
 #include "Unit_Sprite.hpp"
+
 Unit_Sprite* Unit_Sprite::create(){
     Unit_Sprite * sprite = new Unit_Sprite();
     if (sprite->initWithFile("rocket.png")) {
@@ -18,9 +19,18 @@ Unit_Sprite* Unit_Sprite::create(){
     return NULL;
 }
 void Unit_Sprite::initOptions(Unit_Sprite* unit_sprite){
-    unit_in_sprite = new unit();
-    coordinate_X_Y unit_coords = unit_in_sprite->get_unit_coordinates();
-    unit_sprite->setPosition(cocos2d::Vec2(unit_coords.x,unit_coords.y));
-    unit_sprite->setScaleX(unit_in_sprite->get_unit_width()/unit_sprite->getContentSize().width);
-    unit_sprite->setScaleY(unit_in_sprite->get_unit_height()/unit_sprite->getContentSize().height);
+
+    unit *temp = new unit(0, 0);
+   // unit_sprite->setPosition(cocos2d::Vec2(unit_coords.x,unit_coords.y));
+  //  float a =unit_sprite->getContentSize().width;
+    unit_sprite->setScaleX(temp->get_unit_width()/unit_sprite->getContentSize().width);
+    unit_sprite->setScaleY(temp->get_unit_height()/unit_sprite->getContentSize().height);
+    delete temp;
+}
+
+void Unit_Sprite::set_unit_sprite(unit* cur_unit){
+    unit_in_sprite = cur_unit;
+}
+unit* Unit_Sprite::get_unit_in_sprite(){
+    return unit_in_sprite;
 }
