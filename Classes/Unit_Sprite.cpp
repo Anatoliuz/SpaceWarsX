@@ -21,8 +21,6 @@ Unit_Sprite* Unit_Sprite::create(){
 void Unit_Sprite::initOptions(Unit_Sprite* unit_sprite){
 
     unit *temp = new unit(0, 0);
-   // unit_sprite->setPosition(cocos2d::Vec2(unit_coords.x,unit_coords.y));
-  //  float a =unit_sprite->getContentSize().width;
     unit_sprite->setScaleX(temp->get_unit_width()/unit_sprite->getContentSize().width);
     unit_sprite->setScaleY(temp->get_unit_height()/unit_sprite->getContentSize().height);
     delete temp;

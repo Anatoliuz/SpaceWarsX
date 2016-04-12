@@ -2,8 +2,9 @@
 #include <iostream>
 
 using namespace std;
-
-
+void calculationMod::set_dt(float ddt){
+    dt = ddt;
+}
 calculationMod::calculationMod()
 {
     
@@ -67,7 +68,7 @@ void calculationMod::moveUnitsInList(list<unit> &currentListOfUnits, sector **ma
 }
 
 void calculationMod::moveStandartUnit(unit &oneUnit, double differecne_X, double differecne_Y, bool teamFlag){
-    double partOfWay = oneUnit.getSpeed() / 1000.0;
+    double partOfWay =  oneUnit.getSpeed() / 1000.0;
     // Конструкция будет изменена, но щас так удобно для отладки!!!
     if (teamFlag){
         oneUnit.changeCoordinate(differecne_X * partOfWay, differecne_Y * partOfWay);

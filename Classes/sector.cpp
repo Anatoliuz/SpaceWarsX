@@ -1,9 +1,13 @@
 #include "sector.h"
 
-
+void sector::set_dt(float ddt){
+    dt = ddt;
+}
+float sector::get_dt(){
+    return dt;
+}
 sector::sector()
 {
-
 }
 
 sector::sector(double coord_X, double coord_Y, double diff_X, double diff_Y)

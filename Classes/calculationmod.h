@@ -7,9 +7,11 @@
 
 class calculationMod
 {
+private:
+    float dt;
 public:
     calculationMod();
-
+    void set_dt(float);
     void doStep(planet* massOfPlanets, int n);   // Производ все вычисления необходимые для одного рендера (Будет дорабатываться)
 
     // Осуществляет движение всех юнитов на всех планетах (Пока без рёбер)

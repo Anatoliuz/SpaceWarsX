@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-
+using namespace  CocosDenshion;
 USING_NS_CC;
 static cocos2d::Size airResolutionSize = cocos2d::Size(1440, 900);
 static cocos2d::Size designResolutionSize = cocos2d::Size(1440, 900);
@@ -46,9 +46,17 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #endif
         director->setOpenGLView(glview);
     }
-
+   SimpleAudioEngine::sharedEngine()->playBackgroundMusic("background.mp3", true);
+ 
+//    SimpleAudioEngine::sharedEngine()->preloadEffect( CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("pickup.wav") );
+//    SimpleAudioEngine::sharedEngine()->preloadEffect( CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("bombRelease.wav") );
+//    SimpleAudioEngine::sharedEngine()->preloadEffect( CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("rocket.wav") );
+//    SimpleAudioEngine::sharedEngine()->preloadEffect( CCFileUtils::sharedFileUtils()->fullPathFromRelativePath("shipBoom.wav") );
+    
+    SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(0.4f);
+    SimpleAudioEngine::sharedEngine()->setEffectsVolume(0.5f);
     // turn on display FPS
-    director->setDisplayStats(false);
+    director->setDisplayStats(true);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);

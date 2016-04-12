@@ -30,6 +30,8 @@ bool HelloWorld::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size screenSize = CCDirector::sharedDirector()->getWinSize();
+    Point center = Point(screenSize.width/2 + origin.x, screenSize.height/2 + origin.y);
+
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
@@ -66,14 +68,15 @@ bool HelloWorld::init()
 
     // add the sprite as a child to this layer
    
+    _tileMap = new CCTMXTiledMap();
+    _tileMap->initWithTMXFile("untitled.tmx");
+    _background = _tileMap->layerNamed("Background");
     
-
-    auto space = Sprite::create("space.png");
-    space->setPosition(Vec2(screenSize.width/2, screenSize.height/2));
-    this->addChild(space, kBackground);
+    this->addChild(_tileMap);
+    
     
     planet_sprite = Planet_Sprite::create();
-   this->addChild(planet_sprite, kMiddleground);
+    this->addChild(planet_sprite, kMiddleground);
 //
     unit_sprite_1 = Unit_Sprite::create();
     unit_sprite_2 = Unit_Sprite::create();
@@ -83,10 +86,12 @@ bool HelloWorld::init()
     
     massOfPlanets = new planet[num_of_planets];
     massOfPlanets[0] = *(planet_sprite->planet_in_sprite);
-    sector **rockets_to_print = massOfPlanets[0].getMassOfSectors();
+    rockets_to_print = massOfPlanets[0].getMassOfSectors();
+    
+    calculator = new calculationMod();
     std::list<unit> list_units_1 = rockets_to_print[0][0].getListOfUnits1();
     std::list<unit> list_units_2 = rockets_to_print[0][0].getListOfUnits2();
-
+    
     while(!list_units_1.empty()) {
         unit_sprite_1->set_unit_sprite(&list_units_1.front());
         unit temp_unit =  list_units_1.front();
@@ -104,35 +109,38 @@ bool HelloWorld::init()
         this->addChild(unit_sprite_2, kMiddleground);
     }
 
+   
     this->scheduleUpdate();
 
     return true;
 }
-//delta позволяет  сгладить резкозть движения объектов в loop'e
+//delta позволяет  сгладить  движения объектов в loop'e
 void HelloWorld::update(float delta){
-//    int num_of_planets = 1;
-      calculationMod calculator;
-      calculator.doStep(massOfPlanets, num_of_planets);
-    sector **rockets_to_print = massOfPlanets[0].getMassOfSectors();
-    std::list<unit> list_units_1 = rockets_to_print[0][0].getListOfUnits1();
-    std::list<unit> list_units_2 = rockets_to_print[0][0].getListOfUnits2();
+
+    calculator->doStep(massOfPlanets, num_of_planets);
+
+
+        for (int j = 0; j < 8; j++){
+            list_units_1 =  rockets_to_print[0][j].getListOfUnits1();
+            while(!list_units_1.empty()) {
+                unit temp_unit =  list_units_1.front();
+                coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+                unit_sprite_1->setPosition(coords.x, coords.y);
+                list_units_1.pop_front();
+            }
+       }
     
-    while(!list_units_1.empty()) {
-        unit_sprite_1->set_unit_sprite(&list_units_1.front());
-        unit temp_unit =  list_units_1.front();
-        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-        unit_sprite_1->setPosition(Vec2(coords.x, coords.y));
-        list_units_1.pop_back();
-        //this->addChild(unit_sprite_1, kMiddleground);
+    for (int j = 0; j < 8; j++){
+        list_units_2 =  rockets_to_print[0][j].getListOfUnits2();
+        while(!list_units_2.empty()) {
+            unit temp_unit =  list_units_2.front();
+            coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+            unit_sprite_2->setPosition(coords.x, coords.y);
+            list_units_2.pop_front();
+        }
     }
-    while(!list_units_2.empty()) {
-        unit_sprite_2->set_unit_sprite(&list_units_2.front());
-        unit temp_unit =  list_units_2.front();
-        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-        unit_sprite_2->setPosition(Vec2(coords.x, coords.y));
-        list_units_2.pop_back();
-        //this->addChild(unit_sprite_2, kMiddleground);
-    }
+    
+    
 //    auto position = _planet->getPosition();
 //    position.x -= 250 * delta;
 //    if (position.x  < 0 - (_planet->getBoundingBox().size.width / 2))

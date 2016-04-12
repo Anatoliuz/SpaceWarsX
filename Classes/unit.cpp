@@ -71,7 +71,7 @@ moveType unit::getMoveType(){
 
 // Вывод координат в консоль (для отладки)
 void unit::writeCoordinates(){
-    //cout << coordinate.x << " " << coordinate.y << "\n";
+    std::cout << coordinate.x << " " << coordinate.y << "\n";
 }
 
 //размер юнита(высота)
