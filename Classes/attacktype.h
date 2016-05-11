@@ -1,11 +1,9 @@
-
 #ifndef ATTACKTYPE_H
 #define ATTACKTYPE_H
 
-// Пока не требуется  // Но это пока...
-// Тип атаки
+// Тип атаки (На данный момент используется только standartAttack)
 enum attackType{
-    standartAttack, splash
+    standartAttack, splashAttack
 };
 
 #endif // ATTACKTYPE_H

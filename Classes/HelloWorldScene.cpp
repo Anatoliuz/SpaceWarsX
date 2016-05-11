@@ -1,7 +1,8 @@
 #include "HelloWorldScene.h"
 USING_NS_CC;
-int num_of_planets = 1;
 
+int num_of_planetss = 2;
+int num_of_playerss = 2;
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
@@ -73,72 +74,77 @@ bool HelloWorld::init()
     _background = _tileMap->layerNamed("Background");
     
     this->addChild(_tileMap);
+    planets_array = new Planet_Sprite*[num_of_planetss]();
+    for (int i = 0; i < num_of_planetss; ++i) {
+        planets_array[i] = new Planet_Sprite();
+    }
+    planets_array[0] =  Planet_Sprite::create() ;
+    this->addChild(planets_array[0], kMiddleground);
+
+    planets_array[1] =  Planet_Sprite::create(500, 500) ;
+    this->addChild(planets_array[1], kMiddleground);
+
     
+//    auto sprite = Sprite::create("HelloWorld.png");
+//    sprite->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2,
+//                             Director::getInstance()->getVisibleSize().height / 2));
+//    
+//    // Add a "touch" event listener to our sprite
+//    
+//    this->addChild(sprite, 0);
     
-    planet_sprite = Planet_Sprite::create();
-    this->addChild(planet_sprite, kMiddleground);
-//
     unit_sprite_1 = Unit_Sprite::create();
     unit_sprite_2 = Unit_Sprite::create();
-
-   // this->addChild(unit_sprite, kMiddleground);
-
     
-    massOfPlanets = new planet[num_of_planets];
-    massOfPlanets[0] = *(planet_sprite->planet_in_sprite);
-    rockets_to_print = massOfPlanets[0].getMassOfSectors();
-    
-    calculator = new calculationMod();
-    std::list<unit> list_units_1 = rockets_to_print[0][0].getListOfUnits1();
-    std::list<unit> list_units_2 = rockets_to_print[0][0].getListOfUnits2();
-    
-    while(!list_units_1.empty()) {
-        unit_sprite_1->set_unit_sprite(&list_units_1.front());
-        unit temp_unit =  list_units_1.front();
-        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-        unit_sprite_1->setPosition(Vec2(coords.x, coords.y));
-        list_units_1.pop_back();
-        this->addChild(unit_sprite_1, kMiddleground);
+    massOfPlanets = new planet[num_of_planetss];
+    for (int i = 0; i < num_of_planetss; ++i) {
+        massOfPlanets[i] = *(planets_array[i]->planet_in_sprite);
     }
-    while(!list_units_2.empty()) {
-        unit_sprite_2->set_unit_sprite(&list_units_2.front());
-        unit temp_unit =  list_units_2.front();
-        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-        unit_sprite_2->setPosition(Vec2(coords.x, coords.y));
-        list_units_2.pop_back();
-        this->addChild(unit_sprite_2, kMiddleground);
-    }
+
+    rockets_to_print = massOfPlanets->getMassOfSectors();
+//    std::list<unit> list_units = rockets_to_print[0][0]->getMassOfPlayersLists;
+//    calculator = new calculationMod();
+//    //std::list<unit>* list_units = rockets_to_print.getMassOfPlayersLists();
+//    
+//    while(!list_units->empty()) {
+//        unit_sprite_1->set_unit_sprite(&list_units.front());
+//        unit temp_unit =  list_units.front();
+//        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+//        unit_sprite_1->setPosition(Vec2(coords.x, coords.y));
+//        list_units.pop_back();
+//        this->addChild(unit_sprite_1, kMiddleground);
+//    }
 
    
-    this->scheduleUpdate();
+   // this->scheduleUpdate();
 
     return true;
 }
 //delta позволяет  сгладить  движения объектов в loop'e
 void HelloWorld::update(float delta){
 
-    calculator->doStep(massOfPlanets, num_of_planets);
-
-
-        for (int j = 0; j < 8; j++){
-            list_units_1 =  rockets_to_print[0][j].getListOfUnits1();
-            while(!list_units_1.empty()) {
-                unit temp_unit =  list_units_1.front();
-                coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-                unit_sprite_1->setPosition(coords.x, coords.y);
-                list_units_1.pop_front();
-            }
-       }
-    
-    for (int j = 0; j < 8; j++){
-        list_units_2 =  rockets_to_print[0][j].getListOfUnits2();
-        while(!list_units_2.empty()) {
-            unit temp_unit =  list_units_2.front();
-            coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-            unit_sprite_2->setPosition(coords.x, coords.y);
-            list_units_2.pop_front();
-        }
-    }
+//    calculator->doStep(massOfPlanets, num_of_planets);
+//
+//
+//        for (int j = 0; j < 8; j++){
+//            list_units_1 =  rockets_to_print[0][j].getListOfUnits1();
+//            while(!list_units_1.empty()) {
+//                unit temp_unit =  list_units_1.front();
+//                coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+//                unit_sprite_1->setPosition(coords.x, coords.y);
+//                list_units_1.pop_front();
+//            }
+//       }
+//    
+//    for (int j = 0; j < 8; j++){
+//        list_units_2 =  rockets_to_print[0][j].getListOfUnits2();
+//        while(!list_units_2.empty()) {
+//            unit temp_unit =  list_units_2.front();
+//            coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+//            unit_sprite_2->setPosition(coords.x, coords.y);
+//            list_units_2.pop_front();
+//        }
+//    }
     
     
 //    auto position = _planet->getPosition();
@@ -155,3 +161,26 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     exit(0);
 #endif
 }
+
+bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
+{
+    labelTouchInfo->setPosition(touch->getLocation());
+    labelTouchInfo->setString("You Touched Here");
+    return true;
+}
+
+void HelloWorld::onTouchEnded(Touch* touch, Event* event)
+{
+    cocos2d::log("touch ended");
+}
+
+void HelloWorld::onTouchMoved(Touch* touch, Event* event)
+{
+    cocos2d::log("touch moved");
+}
+
+void HelloWorld::onTouchCancelled(Touch* touch, Event* event)
+{
+    cocos2d::log("touch cancelled");
+}
+

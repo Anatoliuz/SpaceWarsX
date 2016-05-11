@@ -15,6 +15,11 @@ class Planet_Sprite: public cocos2d::Sprite{
 public:
     planet* planet_in_sprite;
     static Planet_Sprite *create();
+    static Planet_Sprite *create(double x, double y);
+    void addEvents(Planet_Sprite* sprite);
+    
+    //Метод, который вызывается при "прикосновении" к этому объекту
+    void touchEvent(cocos2d::Touch* touch);
     void initOptions(Planet_Sprite*);
 };
 #endif /* Planet_Sprite_hpp */

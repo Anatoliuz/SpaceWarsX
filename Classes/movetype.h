@@ -1,9 +1,9 @@
 #ifndef MOVETYPE_H
 #define MOVETYPE_H
 
-// Тип движения
+// Тип движения (На данный момент используется только standartMove)
 enum moveType{
-    standartMove, someStrangeFuckingType
+    standartMove, someStrangeMove
 };
 
 #endif // MOVETYPE_H

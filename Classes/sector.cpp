@@ -1,24 +1,24 @@
 #include "sector.h"
 
-void sector::set_dt(float ddt){
-    dt = ddt;
-}
-float sector::get_dt(){
-    return dt;
-}
+
 sector::sector()
 {
+
 }
 
-sector::sector(double coord_X, double coord_Y, double diff_X, double diff_Y)
+sector::sector(double coord_X, double coord_Y, double diff_X, double diff_Y, int numberOfPlayers)
 {
-    differecne_X = diff_X;
-    differecne_Y = diff_Y;
-
     start.x = coord_X;
     start.y = coord_Y;
     finish.x = coord_X;
     finish.y = coord_Y;
+    differecne_X = diff_X;
+    differecne_Y = diff_Y;
+
+    connectPlanet_1 = -1;
+    connectPlanet_2 = -1;
+
+    massOfPlayersListsOfUnits = new list<unit>[numberOfPlayers];
 }
 
 void sector::changeCoordinates(double start_X, double start_Y, double finish_X, double finish_Y){
@@ -26,18 +26,32 @@ void sector::changeCoordinates(double start_X, double start_Y, double finish_X, 
     start.y += start_Y;
     finish.x += finish_X;
     finish.y += finish_Y;
-
-    //this->createUnit();   // Создаем по юниту в секторе для отладки (Потом убрать)
 }
 
-void sector::createUnit1(){
-    unit newUnit(start.x, start.y);
-    listOfUnits1.push_back(newUnit);
+void sector::createUnit1(int planetNumber){
+    unit newUnit(start.x, start.y, planetNumber);
+    massOfPlayersListsOfUnits[0].push_back(newUnit);
 }
 
-void sector::createUnit2(){
-    unit newUnit(finish.x, finish.y);
-    listOfUnits2.push_back(newUnit);
+void sector::createUnit2(int planetNumber){
+    unit newUnit(finish.x, finish.y, planetNumber);
+    massOfPlayersListsOfUnits[1].push_back(newUnit);
+}
+
+void sector::setConnectPlanet_1(int planetNumber){
+    connectPlanet_1 = planetNumber;
+}
+
+void sector::setConnectPlanet_2(int planetNumber){
+    connectPlanet_2 = planetNumber;
+}
+
+coordinate_X_Y sector::getStart(){
+    return start;
+}
+
+coordinate_X_Y sector::getFinish(){
+    return finish;
 }
 
 double sector::getDifference_X(){
@@ -48,10 +62,14 @@ double sector::getDifference_Y(){
     return differecne_Y;
 }
 
-list<unit>& sector::getListOfUnits1(){
-    return listOfUnits1;
+int sector::getConnectPlanet_1(){
+    return connectPlanet_1;
 }
 
-list<unit>& sector::getListOfUnits2(){
-    return listOfUnits2;
+int sector::getConnectPlanet_2(){
+    return connectPlanet_2;
+}
+
+list<unit>* sector::getMassOfPlayersLists(){
+    return massOfPlayersListsOfUnits;
 }

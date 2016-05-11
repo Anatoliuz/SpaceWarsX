@@ -35,13 +35,23 @@ class HelloWorld : public cocos2d::Layer
 private:
     std::list<unit> list_units_1;
     std::list<unit> list_units_2;
+    cocos2d::Label* labelTouchInfo;
 
 public:
     CREATE_FUNC(HelloWorld);
     
-    Planet_Sprite* planet_sprite;
+    virtual bool onTouchBegan(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchEnded(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchMoved(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
+    
+   // Planet_Sprite* planet_sprite[num_of_players];
     Unit_Sprite* unit_sprite_1;
     Unit_Sprite* unit_sprite_2;
+    //std::vector<Planet_Sprite> planet_sprite;
+    Planet_Sprite** planets_array;
+    //Planet_Sprite* planet_sprite_2;
+
     
     calculationMod* calculator;
     sector **rockets_to_print;

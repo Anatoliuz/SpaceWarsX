@@ -20,7 +20,7 @@ Unit_Sprite* Unit_Sprite::create(){
 }
 void Unit_Sprite::initOptions(Unit_Sprite* unit_sprite){
 
-    unit *temp = new unit(0, 0);
+    unit *temp = new unit(0, 0, 1); //!!!
     unit_sprite->setScaleX(temp->get_unit_width()/unit_sprite->getContentSize().width);
     unit_sprite->setScaleY(temp->get_unit_height()/unit_sprite->getContentSize().height);
     delete temp;

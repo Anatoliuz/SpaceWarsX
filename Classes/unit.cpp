@@ -1,39 +1,97 @@
 #include "unit.h"
 #include <iostream>
+#include <math.h>
 
+using namespace std;
 
-void unit::set_dt(float new_dt){
-    dt = new_dt;
+//размер юнита(высота)
+int unit::get_unit_height(){
+    return height;
 }
-float unit::get_dt(){
-    return dt;
-}
-coordinate_X_Y unit::get_unit_coordinates(){
-    return coordinate;
+
+//размер юнита (ширина)
+int unit::get_unit_width(){
+    return width;
 }
 
 unit::unit()
 {
-    std::cout << "ERROR: unimplemented unit() called" << std::endl;
+
 }
 
-unit::unit(double X, double Y)
+coordinate_X_Y unit::get_unit_coordinates(){
+    return coordinate;
+}
+
+
+unit::unit(double X, double Y, int planetNumber)
 {
-    width = 25;
-    height = 50;
-    
     health = 100;
-    speed = 100;
+    speed = 50;
     damage = 35;
-    
+    width = 25;
+    height = 25;
+    currentPlanet = planetNumber;
+    transportationStatus = -1;
+    change = round(900 / speed);
+    countChange = 0;
+    keyRupture = false;
+    recharge = 5;
+    countRecharge = 5;
+
     coordinate.x = X;
     coordinate.y = Y;
-
+    unitAttackType = standartAttack;
     unitMoveType = standartMove;
-    sectorChange = 1000 / speed;
-    countSectorChange = 0;
+    unitRibMoveType = standartRibMove;
+}
 
-    keyRupture = false;
+bool unit::isChange(){
+    return change == countChange;
+}
+
+bool unit::isRupture(){
+    return keyRupture;
+}
+
+bool unit::isRecharge(){
+    return recharge == countRecharge;
+}
+
+bool unit::isDead(){
+    return health <= 0;
+}
+
+void unit::incrementCountChange(){
+    countChange++;
+}
+
+void unit::clearCountChange(){
+    countChange = 0;
+}
+
+void unit::incrementCountRecharge(){
+    countRecharge++;
+}
+
+void unit::clearCountRecharge(){
+    countRecharge = 0;
+}
+
+void unit::setCurrentPlanet(int planetNumber){
+    currentPlanet = planetNumber;
+}
+
+void unit::setTransportationStatus(int status){
+    transportationStatus = status;
+}
+
+void unit::setChange(int change){
+    this->change = change;
+}
+
+void unit::setKeyRupture(bool rupture){
+    keyRupture = rupture;
 }
 
 void unit::changeCoordinate(double X, double Y){
@@ -41,44 +99,51 @@ void unit::changeCoordinate(double X, double Y){
     coordinate.y += Y;
 }
 
-bool unit::isSectorChange(){
-    return sectorChange == countSectorChange;
+void unit::takeDamage(int damage){
+    health -= damage;
 }
 
-bool unit::isRupture(){
-    return keyRupture;
-}
-
-void unit::incrementCountSectorChange(){
-    countSectorChange++;
-}
-
-void unit::clearCountSectorChange(){
-    countSectorChange = 0;
-}
-
-void unit::setKeyRupture(bool rupture){
-    keyRupture = rupture;
+int unit::getHealth(){
+    return health;
 }
 
 int unit::getSpeed(){
     return speed;
 }
 
+int unit::getDamage(){
+    return damage;
+}
+
+int unit::getCurrentPlanet(){
+    return currentPlanet;
+}
+
+int unit::getTransportationStatus(){
+    return transportationStatus;
+}
+
+int unit::getChange(){
+    return change;
+}
+
+coordinate_X_Y unit::getCoordinate(){
+    return coordinate;
+}
+
 moveType unit::getMoveType(){
     return unitMoveType;
 }
 
-// Вывод координат в консоль (для отладки)
-void unit::writeCoordinates(){
-    std::cout << coordinate.x << " " << coordinate.y << "\n";
+ribMoveType unit::getRibMoveType(){
+    return unitRibMoveType;
 }
 
-//размер юнита(высота)
-int unit::get_unit_height(){
-    return height;
+attackType unit::getAttackType(){
+    return unitAttackType;
 }
-//размер юнита (ширина)
-int unit::get_unit_width(){
-    return width;
+
+// Вывод координат в консоль (для отладки)
+void unit::writeCoordinates(){
+    cout << coordinate.x << " " << coordinate.y << "\n";
 }
