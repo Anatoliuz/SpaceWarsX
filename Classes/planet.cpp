@@ -21,6 +21,7 @@ planet::planet()
 
 planet::planet(int planetNumber, double coord_X, double coord_Y, int numberOfPlayers)
 {
+    
     numberOfPlanet = planetNumber;
     this->numberOfPlayers = numberOfPlayers;
     owner = -1;

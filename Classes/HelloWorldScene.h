@@ -1,6 +1,6 @@
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
-
+#include <iostream>
 #include "cocos2d.h"
 #include "sector.h"
 #include "calculationmod.h"
@@ -8,7 +8,7 @@
 #include "Planet_Sprite.hpp"
 #include "Unit_Sprite.hpp"
 #include "SimpleAudioEngine.h"
-
+#include "Building_Sprite.hpp"
 enum {
     kBackground,
     kMiddleground,
@@ -36,6 +36,7 @@ private:
     std::list<unit> list_units_1;
     std::list<unit> list_units_2;
     cocos2d::Label* labelTouchInfo;
+    coordinate_X_Y mouse_coords;
 
 public:
     CREATE_FUNC(HelloWorld);
@@ -46,7 +47,8 @@ public:
     virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
     
    // Planet_Sprite* planet_sprite[num_of_players];
-    Unit_Sprite* unit_sprite_1;
+    Unit_Sprite* unit_sprite;
+    
     Unit_Sprite* unit_sprite_2;
     //std::vector<Planet_Sprite> planet_sprite;
     Planet_Sprite** planets_array;
@@ -54,7 +56,7 @@ public:
 
     
     calculationMod* calculator;
-    sector **rockets_to_print;
+    sector **planet_sector;
     planet *massOfPlanets;
    
     
@@ -63,6 +65,9 @@ public:
     virtual bool init();
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
+    bool isLeftButtonPressed();
+    
+    coordinate_X_Y getMouseCoordinates();
     CC_SYNTHESIZE(cocos2d::Size, _screenSize, set_size);
     // implement the "static create()" method manually
     
@@ -70,7 +75,7 @@ public:
     cocos2d::CCParticleSystem * _jet;
     
     cocos2d:: CCTMXTiledMap *_tileMap;
-     cocos2d::CCTMXLayer *_background;
+    cocos2d::CCTMXLayer *_background;
 
 };
 
