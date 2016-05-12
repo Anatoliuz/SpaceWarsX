@@ -12,6 +12,7 @@
 #include "unit.h"
 #include <list>
 #include "sector.h"
+#include "rib.h"
 class Unit_Sprite: public cocos2d::Sprite{
     
 public:
@@ -24,6 +25,7 @@ public:
     void initOptions(Unit_Sprite*);
     void set_unit_sprite(unit* cur_unit);
     unit* get_unit_in_sprite();
+    //void set_unit_sprite_from_rib(ribStruct *unit);
 };
 
 #endif /* Unit_Sprite_hpp */

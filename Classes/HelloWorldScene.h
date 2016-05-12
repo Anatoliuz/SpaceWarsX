@@ -33,33 +33,38 @@ typedef enum gamestates {
 class HelloWorld : public cocos2d::Layer
 {
 private:
-    std::list<unit> list_units_1;
-    std::list<unit> list_units_2;
+    std::list<unit> *list_units;
+    std::list<ribStruct> *list_units_ribs;
     cocos2d::Label* labelTouchInfo;
     coordinate_X_Y mouse_coords;
-
+    int max;
 public:
     CREATE_FUNC(HelloWorld);
-    
-    virtual bool onTouchBegan(cocos2d::Touch*, cocos2d::Event*);
-    virtual void onTouchEnded(cocos2d::Touch*, cocos2d::Event*);
-    virtual void onTouchMoved(cocos2d::Touch*, cocos2d::Event*);
-    virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
-    
-   // Planet_Sprite* planet_sprite[num_of_players];
-    Unit_Sprite* unit_sprite;
-    
-    Unit_Sprite* unit_sprite_2;
-    //std::vector<Planet_Sprite> planet_sprite;
-    Planet_Sprite** planets_array;
-    //Planet_Sprite* planet_sprite_2;
+    sector **planet_sector;
 
+    void set_max_unit_index(int number);
+    
+    Unit_Sprite** unit_sprite;
+    
+    Planet_Sprite** planet_sprite;
+    planet* planet_array;
+    Building_Sprite* building_sprite;
+    building* building_array;
+    
+    rib* ribs_array;
+    
+    shell* shell_array;
     
     calculationMod* calculator;
-    sector **planet_sector;
+
+   // vector<**planet_sector> vect_of_sectors;
     planet *massOfPlanets;
    
-    
+    vector<planet> vectOfPlanets;
+    vector<rib> vectOfRibs;
+    vector<shell> vectorOfShells;
+    vector<building> vectOfBuildings;
+
     static cocos2d::Scene* createScene();
     void update(float) override;
     virtual bool init();
@@ -77,6 +82,10 @@ public:
     cocos2d:: CCTMXTiledMap *_tileMap;
     cocos2d::CCTMXLayer *_background;
 
+    virtual bool onTouchBegan(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchEnded(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchMoved(cocos2d::Touch*, cocos2d::Event*);
+    virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

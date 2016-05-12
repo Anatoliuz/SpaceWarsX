@@ -32,7 +32,7 @@ public:
 
     list<unit>* getMassOfPlayersLists();   // Возвращает массив списков юнитов всех игроков
 
-private:
+ private:
     coordinate_X_Y start;    // Координаты начала сектора
     coordinate_X_Y finish;   // Координаты конца сектора
     double differecne_X;     // Разница между коодинатой X начала и конца
@@ -41,7 +41,7 @@ private:
     int connectPlanet_1;   // Номер планеты, на которую совершается перелёт из этого сектора первой командой
     int connectPlanet_2;   // Номер планеты, на которую совершается перелёт из этого сектора второй командой
 
-    list<unit> *massOfPlayersListsOfUnits;   // Массив списков юнитов всех игроков
+    list<unit>* massOfPlayersListsOfUnits;   // Массив списков юнитов всех игроков
 };
 
 #endif // SECTOR_H

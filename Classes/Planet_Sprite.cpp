@@ -65,3 +65,9 @@ void Planet_Sprite::initOptions(Planet_Sprite* planet_sprite){
     planet_sprite->setScaleX(planet_in_sprite->get_planet_radius()/planet_sprite->getContentSize().width);
     planet_sprite->setScaleY(planet_in_sprite->get_planet_radius()/planet_sprite->getContentSize().height);
 }
+void Planet_Sprite::set_planet(planet* planet){
+    planet_in_sprite = planet;
+}
+planet* Planet_Sprite::get_planet(){
+    return planet_in_sprite;
+}

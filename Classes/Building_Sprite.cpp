@@ -10,7 +10,7 @@
 using namespace cocos2d;
 Building_Sprite* Building_Sprite::create(){
     Building_Sprite * sprite = new Building_Sprite();
-    if (sprite->initWithFile("building.png")) {
+    if (sprite->initWithFile("HelloWorld.png")) {
         sprite->autorelease();
         sprite->initOptions(sprite);
         sprite->addEvents(sprite);
@@ -22,7 +22,7 @@ Building_Sprite* Building_Sprite::create(){
 Building_Sprite* Building_Sprite::create(double x, double y){
     Building_Sprite * sprite = new Building_Sprite();
     
-    if (sprite->initWithFile("building.png")) {
+    if (sprite->initWithFile("HelloWorld.png")) {
         sprite->autorelease();
         sprite->initOptions(sprite);
         sprite->setPosition(x, y);

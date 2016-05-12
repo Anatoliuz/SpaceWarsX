@@ -1,13 +1,14 @@
 #include "HelloWorldScene.h"
 USING_NS_CC;
 
-int num_of_planetss = 2;
-int num_of_playerss = 2;
+int num_of_planetss = 3;
+int num_of_playerss = 4;
+int num_of_units = 100;
 bool left_button_state = false;
 coordinate_X_Y mouseCoords;
 double mouse_x = 0;
 double mouse_y = 0;
-
+int index_of_unit = 0;
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
@@ -81,159 +82,175 @@ bool HelloWorld::init()
     this->addChild(_tileMap);
 
     
-    
-    
-    
-    
-    
-    planets_array = new Planet_Sprite*[num_of_planetss]();
+    //unit_sprite = Unit_Sprite::create();
+    building_sprite = Building_Sprite::create();
+  //  planet_sprite = Planet_Sprite::create();
+    planet_sprite = new Planet_Sprite*[num_of_planetss];
     for (int i = 0; i < num_of_planetss; ++i) {
-        planets_array[i] = new Planet_Sprite();
-    }
-    planets_array[0] =  Planet_Sprite::create() ;
-    this->addChild(planets_array[0], kMiddleground);
-
-    planets_array[1] =  Planet_Sprite::create(500, 500) ;
-    this->addChild(planets_array[1], kMiddleground);
-
-    
-//    auto sprite = Sprite::create("HelloWorld.png");
-//    sprite->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2,
-//                             Director::getInstance()->getVisibleSize().height / 2));
-//    
-//    // Add a "touch" event listener to our sprite
-//    
-//    this->addChild(sprite, 0);
-    
-  //  sector **rockets_to_print = massOfPlanets[0].getMassOfSectors();
-   // planet_sector = massOfPlanets[0].getMassOfSectors();
-    
-    unit_sprite = Unit_Sprite::create();
-    unit_sprite_2 = Unit_Sprite::create();
-    
-    massOfPlanets = new planet[num_of_planetss];
-    for (int i = 0; i < num_of_planetss; ++i) {
-        massOfPlanets[i] = *(planets_array[i]->planet_in_sprite);
+        planet_sprite[i] = new Planet_Sprite();
+        planet_sprite[i] = Planet_Sprite::create();
     }
     
-
- //   rockets_to_print = massOfPlanets->getMassOfSectors();
-//    std::list<unit> list_units = rockets_to_print[0][0]->getMassOfPlayersLists;
-//    calculator = new calculationMod();
-//    //std::list<unit>* list_units = rockets_to_print.getMassOfPlayersLists();
-//    
-//    while(!list_units->empty()) {
-//        unit_sprite_1->set_unit_sprite(&list_units.front());
-//        unit temp_unit =  list_units.front();
-//        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-//        unit_sprite_1->setPosition(Vec2(coords.x, coords.y));
-//        list_units.pop_back();
-//        this->addChild(unit_sprite_1, kMiddleground);
-//    }
-    vector<planet> vectOfPlanets;
-    vector<rib> vectOfRibs;
-    
-    //planet firstPlanet = planet(0, 0.0, 0.0, 4);
-    //    double ee = 0.554;
-    //    double rr = 0.3232;
-    //    int yy = 0;
-    //    int pp = 4;
+    unit_sprite = new Unit_Sprite*[num_of_units];
+    for (int i = 0; i < num_of_units; ++i) {
+        unit_sprite[i] = new Unit_Sprite();
+       unit_sprite[i] = Unit_Sprite::create();
+    }
+    for (int i = 0; i < num_of_planetss; ++i) {
+        planet_array = new planet[num_of_planetss]();
+    }
+    planet_array[0] = planet(0, 200, 200, 4);
+    planet_array[1] = planet(1, 1000, 500, 4);
+    planet_array[2] = planet(2, 350, 700, 4);
     vectOfPlanets.push_back(planet(0, 0, 0, 4));
     vectOfPlanets.push_back(planet(1, 600, 2000, 4));
     vectOfPlanets.push_back(planet(2, -600, 2000, 4));
-    //massOfPlanets[0] = planet(0, 0, 0, 4);
-    //massOfPlanets[1] = planet(1, 400, 400, 4);
-    //massOfRibs[0] = rib(massOfPlanets[0], massOfPlanets[1], 4);
-    //massOfRibs[0] = rib(vectOfPlanets[0], vectOfPlanets[1], 4);
+    for (int i = 0; i < num_of_planetss; ++i) {
+        planet_sprite[i]->set_planet(&planet_array[i]);
+        coordinate_X_Y coords = planet_array[i].getCoordinates();
+        planet_sprite[i]->setPosition(coords.x, coords.y);
+        this->addChild(planet_sprite[i], kMiddleground);
+    }
     
-    vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[1], 4));
-    vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[2], 4));
-    vectOfRibs.push_back(rib(vectOfPlanets[1], vectOfPlanets[2], 4));
-    
-    std::cout << vectOfRibs[0].getNumb1() << vectOfRibs[0].getNumb2() << vectOfPlanets[1].getNumberOfPlanet() <<"\n\n";
-    std::cout << vectOfRibs[1].getNumb1() << vectOfRibs[1].getNumb2() << vectOfPlanets[2].getNumberOfPlanet() <<"\n\n";
-    
-    
-    vector<shell> vectorOfShells;
-    
-    
-    calculationMod calculator;
-    calculator.createBuilding(vectOfPlanets[1], 1);
-    calculator.createBuilding(vectOfPlanets[2], 0);
+    for (int k = 0; k < num_of_planetss; ++k) {
+       planet_sector = planet_array[k].getMassOfSectors();
+        for (int i = 0; i < 5; ++i) {
+            for (int j = 0; j < 8; ++j) {
+             list_units = planet_sector[i][j].getMassOfPlayersLists();
 
+                for(int jndex = 0; jndex < num_of_playerss; ++jndex){
+                    while (!list_units[jndex].empty()) {
+                        unit_sprite[index_of_unit]->set_unit_sprite(&list_units[jndex].front());
+                        unit temp_unit =  list_units[jndex].front();
+                        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+                        unit_sprite[index_of_unit]->setPosition(Vec2(coords.x, coords.y));
+                        list_units[jndex].pop_front();
+                        this->addChild(unit_sprite[index_of_unit], kMiddleground);
+                        ++index_of_unit;
+                    }
+                }
+            }
+        }
+    }
+
+    
+    vectOfRibs.push_back(rib(planet_array[0], planet_array[1], 4));
+    vectOfRibs.push_back(rib(planet_array[0], planet_array[2], 4));
+    vectOfRibs.push_back(rib(planet_array[1], planet_array[2], 4));
+    
+    
+    for (auto it = vectOfRibs.begin(); it != vectOfRibs.end(); ++it) {
         
+    }
+//    while(!vectOfRibs.empty()){
+//        rib temp = vectOfRibs.front();
+//        list_units_ribs = temp.getMassOfPlayersLists();
+//        while (!list_units_ribs->empty()) {
+//            ribStruct* temp = &list_units_ribs->front();
+//            unit_sprite[index_of_unit]->set_unit_sprite(&temp->oneUnit);
+//            coordinate_X_Y coords = temp->oneUnit.get_unit_coordinates();
+//            unit_sprite[index_of_unit]->setPosition(Vec2(coords.x, coords.y));
+//            list_units_ribs->pop_front();
+//            this->addChild(unit_sprite[index_of_unit], kMiddleground);
+//            ++index_of_unit;
+//        }
+//    }
+    //calculator->createBuilding(vectOfPlanets[1], 1);
+  //  calculator->createBuilding(vectOfPlanets[2], 0);
+
+//рисуем планеты
+    for(int i = 0; i < num_of_planetss; ++i){
+        //vectOfBuildings = vectOfPlanets[i].getVectorOfBuildings();
         
-   //     calculator.doStep(vectOfPlanets, vectOfRibs, vectorOfShells, 4);
-        
-        
-        std::cout << "\n";
-      //  calculator.changeUnitsState(vectOfPlanets[0], 1, 1, 1);
-        //calculator.changeUnitsState(vectOfPlanets[0], 2, 5, 0);
-      //  calculator.changeUnitsState(vectOfPlanets[2], 1, 6, 0);
-        //calculator.changeUnitsState(vectOfPlanets[2], 0, 2, 0);
-        
-        //        if (i == 8)
-        //            changeUnitsState(vectOfPlanets[1], 0, 1, 1);
-        // Остановка времени на 0.1 секунду (между рендерами)
-        // За рендер он будет делать достаточно большой рывок (мне так надо было для отладки)
-        // Фиксится изменение параметра speed с 500 на 20 или 10 в конструкторе юнита (он находится в unit.cpp)
-        //usleep (100000);
+    }
+//    std::cout << "\n";
    
-   this->scheduleUpdate();
+    set_max_unit_index(num_of_units)    ;
+    this->scheduleUpdate();
 
     return true;
 }
+
+
 //delta позволяет  сгладить  движения объектов в loop'e
 void HelloWorld::update(float delta){
 
+//    auto listener = EventListenerMouse::create();
+//    listener->onMouseDown = [](cocos2d::Event* event){
+//        try {
+//            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
+//            mouseEvent->getMouseButton();
+//            std::stringstream message;
+//            message << "Mouse event: Button: " << mouseEvent->getMouseButton() << "pressed at point (" <<
+//            mouseEvent->getLocation().x << "," << mouseEvent->getLocation().y << ")";
+//            
+//            MessageBox(message.str().c_str(), "Mouse Event Details");
+//            
+//        }
+//        catch (std::bad_cast& e){
+//            // Not sure what kind of event you passed us cocos, but it was the wrong one
+//            return;
+//        }
+//    };
+//    
+//    listener->onMouseMove = [](cocos2d::Event* event){
+//        // Cast Event to EventMouse for position details like above
+//        try {
+//            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
+//
+//            mouse_x = mouseEvent->getLocation().x;
+//            mouse_y = mouseEvent->getLocation().y;
+//            cocos2d::log("%f, %f", mouse_x, mouse_y);
+//
+//        }
+//        catch (std::bad_cast& e){
+//            // Not sure what kind of event you passed us cocos, but it was the wrong one
+//            return;
+//        }
+//
+//        cocos2d::log("Mouse moved event");
+//        
+//    };
+//    
+//    listener->onMouseScroll = [](cocos2d::Event* event){
+//        cocos2d::log("Mouse wheel scrolled");
+//    };
+//    
+//    listener->onMouseUp = [](cocos2d::Event* event){
+//        cocos2d::log("Mouse button released");
+//        left_button_state = false;
+//    };
+//    
+//    _eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
     
-    auto listener = EventListenerMouse::create();
-    listener->onMouseDown = [](cocos2d::Event* event){
-        try {
-            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
-            mouseEvent->getMouseButton();
-            std::stringstream message;
-            message << "Mouse event: Button: " << mouseEvent->getMouseButton() << "pressed at point (" <<
-            mouseEvent->getLocation().x << "," << mouseEvent->getLocation().y << ")";
-            
-            MessageBox(message.str().c_str(), "Mouse Event Details");
-            
-        }
-        catch (std::bad_cast& e){
-            // Not sure what kind of event you passed us cocos, but it was the wrong one
-            return;
-        }
-    };
+    //calculator->doStep(vectOfPlanets, vectOfRibs, vectorOfShells, 4);
+//    index_of_unit = 0;
+//    planet_sector = planet_array[0].getMassOfSectors();
+//            for (int j = 0; j < 8; ++j) {
+//                list_units = planet_sector[0][j].getMassOfPlayersLists();
+//                    while (!list_units[0].empty()) {
+//                        unit_sprite[index_of_unit]->set_unit_sprite(&list_units[0].front());
+//                        unit temp_unit =  list_units[0].front();
+//                        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+//                        unit_sprite[index_of_unit]->setPosition(Vec2(coords.x, coords.y));
+//                        list_units[0].pop_front();
+//                         ++index_of_unit;
+//                    }
+//                }
     
-    listener->onMouseMove = [](cocos2d::Event* event){
-        // Cast Event to EventMouse for position details like above
-        try {
-            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
+}
 
-            mouse_x = mouseEvent->getLocation().x;
-            mouse_y = mouseEvent->getLocation().y;
-            cocos2d::log("%f, %f", mouse_x, mouse_y);
+//    for (int j = 0; j < 8; j++){
+//        list_units_1 =  rockets_to_print[0][j].getListOfUnits1();
+//        while(!list_units_1.empty()) {
+//            unit temp_unit =  list_units_1.front();
+//            coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+//            unit_sprite_1->setPosition(coords.x, coords.y);
+//            list_units_1.pop_front();
+//        }
+//    }
 
-        }
-        catch (std::bad_cast& e){
-            // Not sure what kind of event you passed us cocos, but it was the wrong one
-            return;
-        }
-
-        cocos2d::log("Mouse moved event");
-        
-    };
     
-    listener->onMouseScroll = [](cocos2d::Event* event){
-        cocos2d::log("Mouse wheel scrolled");
-    };
-    
-    listener->onMouseUp = [](cocos2d::Event* event){
-        cocos2d::log("Mouse button released");
-        left_button_state = false;
-    };
-    
-    _eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
 //    calculator->doStep(massOfPlanets, num_of_planets);
 //
 //
@@ -263,7 +280,6 @@ void HelloWorld::update(float delta){
 //    if (position.x  < 0 - (_planet->getBoundingBox().size.width / 2))
 //        position.x = this->getBoundingBox().getMaxX() + _planet->getBoundingBox().size.width/2;
 //    _planet->setPosition(position);
-}
 
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
@@ -305,4 +321,8 @@ coordinate_X_Y HelloWorld::getMouseCoordinates(){
     mouseCoords.x = mouse_x;
     mouseCoords.y = mouse_y;
     return mouseCoords;
+}
+
+void HelloWorld::set_max_unit_index(int num){
+    max  = num;
 }

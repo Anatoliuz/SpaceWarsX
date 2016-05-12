@@ -18,6 +18,9 @@ public:
     static Planet_Sprite *create(double x, double y);
     void addEvents(Planet_Sprite* sprite);
     
+    void set_planet(planet*);
+    planet* get_planet();
+
     //Метод, который вызывается при "прикосновении" к этому объекту
     void touchEvent(cocos2d::Touch* touch);
     void initOptions(Planet_Sprite*);

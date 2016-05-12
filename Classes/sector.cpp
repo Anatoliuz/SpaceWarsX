@@ -19,6 +19,10 @@ sector::sector(double coord_X, double coord_Y, double diff_X, double diff_Y, int
     connectPlanet_2 = -1;
 
     massOfPlayersListsOfUnits = new list<unit>[numberOfPlayers];
+    
+    
+    //!!!
+    
 }
 
 void sector::changeCoordinates(double start_X, double start_Y, double finish_X, double finish_Y){
@@ -30,7 +34,7 @@ void sector::changeCoordinates(double start_X, double start_Y, double finish_X, 
 
 void sector::createUnit1(int planetNumber){
     unit newUnit(start.x, start.y, planetNumber);
-    massOfPlayersListsOfUnits[0].push_back(newUnit);
+    (massOfPlayersListsOfUnits[0]).push_back(newUnit);
 }
 
 void sector::createUnit2(int planetNumber){
