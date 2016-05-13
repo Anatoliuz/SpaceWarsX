@@ -5,7 +5,6 @@
 #include <movetype.h>
 #include <ribmovetype.h>
 #include <attacktype.h>
-
 class unit{
 public:
     unit();
@@ -47,7 +46,11 @@ public:
     coordinate_X_Y get_unit_coordinates();
     int get_unit_height();
     int get_unit_width();
+    
+    int get_id();
+    
 private:
+    
     int health;   // Жизни
     int speed;    // Скорость
     int damage;   // Урон
@@ -61,6 +64,7 @@ private:
     int recharge;               // Значение завершения перезарядки
     int countRecharge;          // Счётчик перезарядки
 
+    int internal_id;
     coordinate_X_Y coordinate;     // Координаты
     moveType unitMoveType;         // Тип движения
     ribMoveType unitRibMoveType;   // Тип движения в ребре

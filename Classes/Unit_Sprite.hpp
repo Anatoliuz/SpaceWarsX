@@ -14,11 +14,11 @@
 #include "sector.h"
 #include "rib.h"
 class Unit_Sprite: public cocos2d::Sprite{
+private:
+    int unit_sprite_id;
     
 public:
    
-    sector **rockets_to_print;
-    std::list<unit> list_units_1;
     unit* unit_in_sprite;
     
     static Unit_Sprite *create();
@@ -26,6 +26,8 @@ public:
     void set_unit_sprite(unit* cur_unit);
     unit* get_unit_in_sprite();
     //void set_unit_sprite_from_rib(ribStruct *unit);
+    
+    void set_id(int num);
 };
 
 #endif /* Unit_Sprite_hpp */

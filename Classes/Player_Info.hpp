@@ -11,4 +11,7 @@
 
 #include <stdio.h>
 
+struct Player_Info{
+    int player_num;
+};
 #endif /* Player_Info_hpp */

@@ -26,6 +26,10 @@ coordinate_X_Y unit::get_unit_coordinates(){
 
 unit::unit(double X, double Y, int planetNumber)
 {
+    static int unit_id = 0;
+
+    unit_id++;
+    internal_id = unit_id;
     health = 100;
     speed = 50;
     damage = 35;
@@ -146,4 +150,7 @@ attackType unit::getAttackType(){
 // Вывод координат в консоль (для отладки)
 void unit::writeCoordinates(){
     cout << coordinate.x << " " << coordinate.y << "\n";
+}
+int  unit::get_id(){
+    return internal_id;
 }

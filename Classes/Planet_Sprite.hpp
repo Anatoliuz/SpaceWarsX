@@ -10,7 +10,7 @@
 #define Planet_Sprite_hpp
 
 #include "planet.h"
-
+#include "ui/CocosGUI.h"
 class Planet_Sprite: public cocos2d::Sprite{
 public:
     planet* planet_in_sprite;

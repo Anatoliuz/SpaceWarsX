@@ -3,12 +3,12 @@ USING_NS_CC;
 
 int num_of_planetss = 3;
 int num_of_playerss = 4;
-int num_of_units = 100;
+int num_of_units = 500;
 bool left_button_state = false;
 coordinate_X_Y mouseCoords;
 double mouse_x = 0;
 double mouse_y = 0;
-int index_of_unit = 0;
+
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
@@ -80,8 +80,56 @@ bool HelloWorld::init()
     _background = _tileMap->layerNamed("Background");
     
     this->addChild(_tileMap);
-
     
+
+    auto listener = EventListenerMouse::create();
+    listener->onMouseDown = [](cocos2d::Event* event){
+        try {
+            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
+            mouseEvent->getMouseButton();
+            std::stringstream message;
+            message << "Mouse event: Button: " << mouseEvent->getMouseButton() << "pressed at point (" <<
+            mouseEvent->getLocation().x << "," << mouseEvent->getLocation().y << ")";
+            
+            MessageBox(message.str().c_str(), "Mouse Event Details");
+            
+        }
+        catch (std::bad_cast& e){
+            // Not sure what kind of event you passed us cocos, but it was the wrong one
+            return;
+        }
+    };
+    
+    listener->onMouseMove = [](cocos2d::Event* event){
+        // Cast Event to EventMouse for position details like above
+        try {
+            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
+            
+            mouse_x = mouseEvent->getLocation().x;
+            mouse_y = mouseEvent->getLocation().y;
+            cocos2d::log("%f, %f", mouse_x, mouse_y);
+            
+        }
+        catch (std::bad_cast& e){
+            // Not sure what kind of event you passed us cocos, but it was the wrong one
+            return;
+        }
+        
+        cocos2d::log("Mouse moved event");
+        
+    };
+    
+    listener->onMouseScroll = [](cocos2d::Event* event){
+        cocos2d::log("Mouse wheel scrolled");
+    };
+    
+    listener->onMouseUp = [](cocos2d::Event* event){
+        cocos2d::log("Mouse button released");
+        left_button_state = false;
+    };
+    
+    _eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
+
     //unit_sprite = Unit_Sprite::create();
     building_sprite = Building_Sprite::create();
   //  planet_sprite = Planet_Sprite::create();
@@ -117,16 +165,16 @@ bool HelloWorld::init()
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 8; ++j) {
              list_units = planet_sector[i][j].getMassOfPlayersLists();
-
                 for(int jndex = 0; jndex < num_of_playerss; ++jndex){
                     while (!list_units[jndex].empty()) {
-                        unit_sprite[index_of_unit]->set_unit_sprite(&list_units[jndex].front());
                         unit temp_unit =  list_units[jndex].front();
+                        int id =  temp_unit.get_id();
+                        id -= num_of_units;
+                        unit_sprite[id]->set_unit_sprite(&list_units[jndex].front());
                         coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-                        unit_sprite[index_of_unit]->setPosition(Vec2(coords.x, coords.y));
+                        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
                         list_units[jndex].pop_front();
-                        this->addChild(unit_sprite[index_of_unit], kMiddleground);
-                        ++index_of_unit;
+                        this->addChild(unit_sprite[id], kMiddleground);
                     }
                 }
             }
@@ -175,53 +223,28 @@ bool HelloWorld::init()
 //delta позволяет  сгладить  движения объектов в loop'e
 void HelloWorld::update(float delta){
 
-//    auto listener = EventListenerMouse::create();
-//    listener->onMouseDown = [](cocos2d::Event* event){
-//        try {
-//            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
-//            mouseEvent->getMouseButton();
-//            std::stringstream message;
-//            message << "Mouse event: Button: " << mouseEvent->getMouseButton() << "pressed at point (" <<
-//            mouseEvent->getLocation().x << "," << mouseEvent->getLocation().y << ")";
-//            
-//            MessageBox(message.str().c_str(), "Mouse Event Details");
-//            
+    calculator->doStep(vectOfPlanets, vectOfRibs, vectorOfShells, 4);
+    
+//    for(int k = 0; k < num_of_planetss; ++k){
+//        planet_sector = vectOfPlanets[k].getMassOfSectors();
+//        for(int i = 0; i < 5; ++i){
+//            for(int j = 0; j < 8; ++j){
+//                list_units = planet_sector[i][j].getMassOfPlayersLists();
+//                for(int jndex = 0; jndex < num_of_playerss; ++jndex){
+//                    while (!list_units[jndex].empty()) {
+//                        unit temp_unit =  list_units[jndex].front();
+//                        int id =  temp_unit.get_id();
+//                        id -= num_of_units;
+//                        unit_sprite[id]->set_unit_sprite(&list_units[jndex].front());
+//                        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+//                    //    unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
+//                        list_units[jndex].pop_front();
+//                    }
+//                }
+//            }
 //        }
-//        catch (std::bad_cast& e){
-//            // Not sure what kind of event you passed us cocos, but it was the wrong one
-//            return;
-//        }
-//    };
-//    
-//    listener->onMouseMove = [](cocos2d::Event* event){
-//        // Cast Event to EventMouse for position details like above
-//        try {
-//            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
-//
-//            mouse_x = mouseEvent->getLocation().x;
-//            mouse_y = mouseEvent->getLocation().y;
-//            cocos2d::log("%f, %f", mouse_x, mouse_y);
-//
-//        }
-//        catch (std::bad_cast& e){
-//            // Not sure what kind of event you passed us cocos, but it was the wrong one
-//            return;
-//        }
-//
-//        cocos2d::log("Mouse moved event");
-//        
-//    };
-//    
-//    listener->onMouseScroll = [](cocos2d::Event* event){
-//        cocos2d::log("Mouse wheel scrolled");
-//    };
-//    
-//    listener->onMouseUp = [](cocos2d::Event* event){
-//        cocos2d::log("Mouse button released");
-//        left_button_state = false;
-//    };
-//    
-//    _eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
+//    }
+    
     
     //calculator->doStep(vectOfPlanets, vectOfRibs, vectorOfShells, 4);
 //    index_of_unit = 0;
