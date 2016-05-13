@@ -71,7 +71,47 @@ void calculationMod::createBuilding(planet &onePlanet, int playerNumber){
     cout << "Создали здание!\n";   // Для отладки
 }
 
+vector<unit> calculationMod::getVectorOfUnits(vector<planet> vectorOfPlanets, vector<rib> vectorOfRibs, int numbOfPlayers){
+    vector<unit> vectorOfUnits;
 
+    for (unsigned int i = 0; i < vectorOfPlanets.size(); i++){
+        sector **massOfSectors = vectorOfPlanets[i].getMassOfSectors();
+
+        for (int i = 0; i < 5; i++){
+            for (int j = 0; j < 8; j++){
+                list<unit> *massOfPlayersList = massOfSectors[i][j].getMassOfPlayersLists();
+
+                for (int playerNumber = 0; playerNumber < numbOfPlayers; playerNumber++){
+                    list<unit> listOfUnits = massOfPlayersList[playerNumber];
+
+                    list<unit>::iterator oneOfUnits = listOfUnits.begin();
+                    while(oneOfUnits != listOfUnits.end())
+                    {
+                        vectorOfUnits.push_back(*oneOfUnits);
+                        oneOfUnits++;
+                    }
+                }
+            }
+        }
+    }
+
+    for (unsigned int i = 0; i < vectorOfRibs.size(); i++){
+        list<ribStruct>* massOfPlayersList = vectorOfRibs[i].getMassOfPlayersLists();
+
+        for (int playerNumber = 0; playerNumber < numbOfPlayers; playerNumber++){
+            list<ribStruct> listOfUnits = massOfPlayersList[playerNumber];
+
+            list<ribStruct>::iterator oneOfRibStructs = listOfUnits.begin();
+            while(oneOfRibStructs != listOfUnits.end())
+            {
+                vectorOfUnits.push_back(oneOfRibStructs->oneUnit);
+                oneOfRibStructs++;
+            }
+        }
+    }
+
+    return vectorOfUnits;
+}
 
 
 // Далее идут приватные функции
@@ -88,9 +128,11 @@ void calculationMod::moveAllUnits(vector<planet> &vectorOfPlanets, vector<rib> &
 
 void calculationMod::moveAllUnitsOnPlanet(planet &onePlanet, int numbOfPlayers, vector<rib> &vectorOfRibs){
     sector **massOfSectors = onePlanet.getMassOfSectors();
+
     for (int i = 0; i < 5; i++){
         for (int j = 0; j < 8; j++){
             list<unit> *massOfPlayersList = massOfSectors[i][j].getMassOfPlayersLists();
+
             for (int playerNumber = 0; playerNumber < numbOfPlayers; playerNumber++){
                 list<unit> &listOfUnits = massOfPlayersList[playerNumber];
                 moveUnitsInSectorList(listOfUnits, massOfSectors, i , j, playerNumber, vectorOfRibs, onePlanet);
@@ -107,6 +149,7 @@ void calculationMod::moveUnitsInSectorList(list<unit> &currentListOfUnits, secto
     {
         if (oneOfUnits->isRupture()){
             oneOfUnits->setKeyRupture(false);
+            oneOfUnits++;
         }
         else
         {
@@ -126,12 +169,14 @@ void calculationMod::moveUnitsInSectorList(list<unit> &currentListOfUnits, secto
 
             if (oneOfUnits->isChange()){
                 addToSectorOrRib(*oneOfUnits, massOfSectors, i, j, playerNumber, vectorOfRibs, onePlanet);
-                currentListOfUnits.erase(oneOfUnits);
-                oneOfUnits--;
+                currentListOfUnits.erase(oneOfUnits++);
+                //oneOfUnits--;
             }
+            else
+                oneOfUnits++;
         }
 
-        oneOfUnits++;
+        //oneOfUnits++;
     }
 }
 
@@ -279,6 +324,7 @@ void calculationMod::moveUnitsInRibList(list<ribStruct> &listOfUnits, vector<pla
             double sectorDistance = 200;    // Предварительный вариант константы
             int change = round(900 / oneOfRibStruct->oneUnit.getSpeed() * ribDistance / sectorDistance);
             oneOfRibStruct->oneUnit.setChange(change);
+            oneOfRibStruct++;
         }
         else
         {
@@ -296,12 +342,14 @@ void calculationMod::moveUnitsInRibList(list<ribStruct> &listOfUnits, vector<pla
 
             if (oneOfRibStruct->oneUnit.isChange()){
                 addToPlanet(*oneOfRibStruct, vectorOfPlanets, playerNumber);
-                listOfUnits.erase(oneOfRibStruct);
-                oneOfRibStruct--;
+                listOfUnits.erase(oneOfRibStruct++);
+                //oneOfRibStruct--;
             }
+            else
+                oneOfRibStruct++;
         }
 
-        oneOfRibStruct++;
+        //oneOfRibStruct++;
     }
 }
 
@@ -486,17 +534,15 @@ void calculationMod::deleteALLDeadObjectsOnPlanet(planet &onePlanet, int numbOfP
 
     vector<building> &vectorOfBuildings = onePlanet.getVectorOfBuildings();
 
-    for (unsigned int i = 0; i < vectorOfBuildings.size(); i++){
-        vector<building>::iterator oneOfBuildings = vectorOfBuildings.begin();
-        while (oneOfBuildings != vectorOfBuildings.end())
-        {
-            if (oneOfBuildings->isDead()){
-                vectorOfBuildings.erase(oneOfBuildings);
-                oneOfBuildings--;
-            }
-
-            oneOfBuildings++;
+    vector<building>::iterator oneOfBuildings = vectorOfBuildings.begin();
+    while (oneOfBuildings != vectorOfBuildings.end())
+    {
+        if (oneOfBuildings->isDead()){
+            oneOfBuildings = vectorOfBuildings.erase(oneOfBuildings);
+            //oneOfBuildings--;
         }
+        else
+            oneOfBuildings++;
     }
 }
 
@@ -506,11 +552,13 @@ void calculationMod::deleteDeadUnitsInList(list<unit> &listOfUnits, planet &oneP
     {
         if (oneOfUnits->isDead()){
             onePlanet.decrementUnitsCount(playerNumber);
-            listOfUnits.erase(oneOfUnits);
-            oneOfUnits--;
+            listOfUnits.erase(oneOfUnits++);
+            //oneOfUnits--;
         }
+        else
+            oneOfUnits++;
 
-        oneOfUnits++;
+        //oneOfUnits++;
     }
 }
 

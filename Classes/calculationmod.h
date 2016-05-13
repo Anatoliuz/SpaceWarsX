@@ -19,6 +19,8 @@ public:
     void changeUnitsState(planet &currentPlanet, int state, int n, int playerNumber);
     // Создает здание на планете
     void createBuilding(planet &onePlanet, int playerNumber);
+    // Возвращает вектор всех юнитов
+    vector<unit> getVectorOfUnits(vector<planet> vectorOfPlanets, vector<rib> vectorOfRibs, int numbOfPlayers);
 
 private:
     // Осуществляет движение всех юнитов
