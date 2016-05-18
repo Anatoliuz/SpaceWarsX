@@ -8,6 +8,7 @@
 #include "Planet_Sprite.hpp"
 #include "Unit_Sprite.hpp"
 #include "SimpleAudioEngine.h"
+#include "ui/CocosGUI.h"
 #include "Building_Sprite.hpp"
 enum {
     kBackground,
@@ -64,7 +65,9 @@ public:
     vector<rib> vectOfRibs;
     vector<shell> vectorOfShells;
     vector<building> vectOfBuildings;
-
+//    Client* client;
+    
+    
     static cocos2d::Scene* createScene();
     void update(float) override;
     virtual bool init();
@@ -86,6 +89,9 @@ public:
     virtual void onTouchEnded(cocos2d::Touch*, cocos2d::Event*);
     virtual void onTouchMoved(cocos2d::Touch*, cocos2d::Event*);
     virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
+    void toGameScene();
+    void  transitionToGameScene();
+    void startGame();
 };
 
 #endif // __HELLOWORLD_SCENE_H__

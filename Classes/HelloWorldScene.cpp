@@ -1,4 +1,5 @@
 #include "HelloWorldScene.h"
+
 USING_NS_CC;
 
 int num_of_planetss = 3;
@@ -38,7 +39,9 @@ bool HelloWorld::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size screenSize = CCDirector::sharedDirector()->getWinSize();
     Point center = Point(screenSize.width/2 + origin.x, screenSize.height/2 + origin.y);
-
+    
+    
+    
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
@@ -80,7 +83,7 @@ bool HelloWorld::init()
     _background = _tileMap->layerNamed("Background");
     
     this->addChild(_tileMap);
-    
+
 
     auto listener = EventListenerMouse::create();
     listener->onMouseDown = [](cocos2d::Event* event){
@@ -138,54 +141,72 @@ bool HelloWorld::init()
         planet_sprite[i] = new Planet_Sprite();
         planet_sprite[i] = Planet_Sprite::create();
     }
-    
-    unit_sprite = new Unit_Sprite*[num_of_units];
-    for (int i = 0; i < num_of_units; ++i) {
-        unit_sprite[i] = new Unit_Sprite();
-       unit_sprite[i] = Unit_Sprite::create();
-    }
+
+   
     for (int i = 0; i < num_of_planetss; ++i) {
         planet_array = new planet[num_of_planetss]();
     }
     planet_array[0] = planet(0, 200, 200, 4);
     planet_array[1] = planet(1, 1000, 500, 4);
     planet_array[2] = planet(2, 350, 700, 4);
-    vectOfPlanets.push_back(planet(0, 0, 0, 4));
-    vectOfPlanets.push_back(planet(1, 600, 2000, 4));
-    vectOfPlanets.push_back(planet(2, -600, 2000, 4));
+    vectOfPlanets.push_back(planet(0, 200, 200, 4));
+    vectOfPlanets.push_back(planet(1, 1000, 500, 4));
+    vectOfPlanets.push_back(planet(2, 350, 700, 4));
     for (int i = 0; i < num_of_planetss; ++i) {
         planet_sprite[i]->set_planet(&planet_array[i]);
         coordinate_X_Y coords = planet_array[i].getCoordinates();
         planet_sprite[i]->setPosition(coords.x, coords.y);
         this->addChild(planet_sprite[i], kMiddleground);
     }
-    
-    for (int k = 0; k < num_of_planetss; ++k) {
-       planet_sector = planet_array[k].getMassOfSectors();
-        for (int i = 0; i < 5; ++i) {
-            for (int j = 0; j < 8; ++j) {
-             list_units = planet_sector[i][j].getMassOfPlayersLists();
-                for(int jndex = 0; jndex < num_of_playerss; ++jndex){
-                    while (!list_units[jndex].empty()) {
-                        unit temp_unit =  list_units[jndex].front();
-                        int id =  temp_unit.get_id();
-                        id -= num_of_units;
-                        unit_sprite[id]->set_unit_sprite(&list_units[jndex].front());
-                        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-                        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
-                        list_units[jndex].pop_front();
-                        this->addChild(unit_sprite[id], kMiddleground);
-                    }
-                }
-            }
-        }
+    unit_sprite = new Unit_Sprite*[100000];
+    for (int i = 0; i < 100000; ++i) {
+        unit_sprite[i] = new Unit_Sprite();
+        unit_sprite[i] = Unit_Sprite::create();
     }
+    vector<unit> temp = calculator->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
+    int size = temp.size();
+    
+    int id = 0;
+    while(!temp.empty()){
+        
+        unit temp_unit = temp.back();
+        //int id =  temp_unit.get_id();
+        //id -= num_of_units;
+        unit_sprite[id]->set_unit_sprite(&temp.back());
+        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
+        temp.pop_back();
+        this->addChild(unit_sprite[id], kMiddleground);
+        ++id;
+    }
+//    for (int k = 0; k < num_of_planetss; ++k) {
+//       planet_sector = planet_array[k].getMassOfSectors();
+//        for (int i = 0; i < 5; ++i) {
+//            for (int j = 0; j < 8; ++j) {
+//             list_units = planet_sector[i][j].getMassOfPlayersLists();
+//                for(int jndex = 0; jndex < num_of_playerss; ++jndex){
+//                    while (!list_units[jndex].empty()) {
+//                        unit temp_unit =  list_units[jndex].front();
+//                        int id =  temp_unit.get_id();
+//                        id -= num_of_units;
+//                        unit_sprite[id]->set_unit_sprite(&list_units[jndex].front());
+//                        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+//                        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
+//                        list_units[jndex].pop_front();
+//                        this->addChild(unit_sprite[id], kMiddleground);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     
     vectOfRibs.push_back(rib(planet_array[0], planet_array[1], 4));
     vectOfRibs.push_back(rib(planet_array[0], planet_array[2], 4));
     vectOfRibs.push_back(rib(planet_array[1], planet_array[2], 4));
     
+    calculator->createBuilding(vectOfPlanets[0], 0);
+    vector<building> tempo;
     
     for (auto it = vectOfRibs.begin(); it != vectOfRibs.end(); ++it) {
         
@@ -214,8 +235,9 @@ bool HelloWorld::init()
 //    std::cout << "\n";
    
     set_max_unit_index(num_of_units)    ;
-    this->scheduleUpdate();
+    //this->toGameScene();
 
+    this->scheduleUpdate();
     return true;
 }
 
@@ -224,7 +246,25 @@ bool HelloWorld::init()
 void HelloWorld::update(float delta){
 
     calculator->doStep(vectOfPlanets, vectOfRibs, vectorOfShells, 4);
+    vector<unit> temp = calculator->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
+    int size = temp.size();
+    int id = 0;
+    while(!temp.empty()){
+        unit temp_unit = temp.back();
+        //int id =  temp_unit.get_id();
+        //id -= num_of_units;
+        unit_sprite[id]->set_unit_sprite(&temp.back());
+        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
+        temp.pop_back();
+       // this->addChild(unit_sprite[id], kMiddleground);
+        ++id;
+    }
     
+//    int max = id;
+//    for (int i =0 ; i < max; ++i) {
+//        this->removeChild(unit_sprite[i], kMiddleground);
+//    }
 //    for(int k = 0; k < num_of_planetss; ++k){
 //        planet_sector = vectOfPlanets[k].getMassOfSectors();
 //        for(int i = 0; i < 5; ++i){
@@ -349,3 +389,45 @@ coordinate_X_Y HelloWorld::getMouseCoordinates(){
 void HelloWorld::set_max_unit_index(int num){
     max  = num;
 }
+
+void HelloWorld::transitionToGameScene()
+{
+    auto size = Director::getInstance()->getWinSize();      //get the windows size.
+    
+    auto clipper = ClippingNode::create();      // create the ClippingNode object
+    
+    auto stencil = DrawNode::create();      // create the DrawNode object which can draw dots, segments and polygons.
+    
+    Point triangle[3];      // init the  triangle vertexes. here my win size is 360x640, so my triangle vertexes init by these values. You can change the values to adapt your scree.
+    triangle[0] = Point(-size.width * 1.5f, -size.height / 2);
+    triangle[1] = Point(size.width * 1.5f, -size.height / 2);
+    triangle[2] = Point(0, size.height);
+    Color4F green(0, 1, 0, 1);
+    
+    stencil->drawPolygon(triangle, 3, green, 0, green);     //use the drawNode to draw the triangle to cut the ClippingNode.
+    
+    clipper->setAnchorPoint(Point(0.5f, 0.5f));     // set the ClippingNode anchorPoint, to make sure the drawNode at the center of ClippingNode
+    clipper->setPosition(size.width / 2, size.height / 2);
+    clipper->setStencil(stencil);   //set the cut triangle in the ClippingNode.
+    clipper->setInverted(true);     //make sure the content is show right side.
+    
+    Sprite* blackRect = Sprite::create("black_screen.png");     //create a black screen sprite to make sure the bottom is black. the"black_screen.png" is a "black screen" png.
+    
+    clipper->addChild(blackRect);   //to make sure the cover is black.
+    
+    this->addChild(clipper, 500);
+    
+    // the Clipping node triangle  add some actions to make the triangle scale and rotate.
+    stencil->runAction(EaseSineOut::create(Spawn::create(ScaleTo::create(2.5f, 0.0f, 0.0f), RotateBy::create(2.5f, 540),
+                                                         Sequence::create(DelayTime::create(2.5), CallFunc::create(this, callfunc_selector(HelloWorld::toGameScene)), NULL), NULL)));
+    
+}
+
+void HelloWorld::toGameScene()
+{
+    //get the game scene and run it.
+    auto scene = HelloWorld::createScene();
+    Director::getInstance()->replaceScene(scene);
+}
+
+

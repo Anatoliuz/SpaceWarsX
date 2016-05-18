@@ -35,24 +35,27 @@ Planet_Sprite* Planet_Sprite::create(double x, double y){
 }
 void Planet_Sprite::addEvents(Planet_Sprite* sprite){
     auto touchListener = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = [](Touch* touch, Event* event) -> bool {
+    touchListener->onTouchBegan = [this](Touch* touch, Event* event) -> bool {
         
-//        auto bounds = event->getCurrentTarget()->getBoundingBox();
-//        
-//        if (bounds.containsPoint(touch->getLocation())){
-//            std::stringstream touchDetails;
-//            touchDetails << "Touched at OpenGL coordinates: " <<
-//            touch->getLocation().x << "," << touch->getLocation().y << std::endl <<
-//            "Touched at UI coordinate: " <<
-//            touch->getLocationInView().x << "," << touch->getLocationInView().y << std::endl <<
-//            "Touched at local coordinate:" <<
-//            event->getCurrentTarget()->convertToNodeSpace(touch->getLocation()).x << "," <<
-//            event->getCurrentTarget()->convertToNodeSpace(touch->getLocation()).y << std::endl <<
-//            "Touch moved by:" << touch->getDelta().x << "," << touch->getDelta().y;
-//            //MessageBox(touchDetails.str().c_str(), "Touched");
-//
-//        }
-//        return true;
+        auto bounds = event->getCurrentTarget()->getBoundingBox();
+        
+        if (bounds.containsPoint(touch->getLocation())){
+            std::stringstream touchDetails;
+            touchDetails << "Touched at OpenGL coordinates: " <<
+            touch->getLocation().x << "," << touch->getLocation().y << std::endl <<
+            "Touched at UI coordinate: " <<
+            touch->getLocationInView().x << "," << touch->getLocationInView().y << std::endl <<
+            "Touched at local coordinate:" <<
+            event->getCurrentTarget()->convertToNodeSpace(touch->getLocation()).x << "," <<
+            event->getCurrentTarget()->convertToNodeSpace(touch->getLocation()).y << std::endl <<
+            "Touch moved by:" << touch->getDelta().x << "," << touch->getDelta().y;
+           // MessageBox(touchDetails.str().c_str(), "Touched");
+           // this->addChild();
+            cocos2d::Sprite* _mySprite = cocos2d::Sprite::create("rocket.png");
+            this->addChild(_mySprite, 3);
+            
+        }
+        return true;
     };
    
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener,sprite);
