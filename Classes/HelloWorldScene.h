@@ -49,18 +49,11 @@ public:
     
     Planet_Sprite** planet_sprite;
     planet* planet_array;
-    Building_Sprite* building_sprite;
+    Building_Sprite** building_sprite;
     building* building_array;
     
-    rib* ribs_array;
-    
-    shell* shell_array;
-    
     calculationMod* calculator;
-
-   // vector<**planet_sector> vect_of_sectors;
-    planet *massOfPlanets;
-   
+    vector<building> tempo;
     vector<planet> vectOfPlanets;
     vector<rib> vectOfRibs;
     vector<shell> vectorOfShells;

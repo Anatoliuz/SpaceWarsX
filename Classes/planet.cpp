@@ -78,7 +78,7 @@ planet::planet(int planetNumber, double coord_X, double coord_Y, int numberOfPla
         massOfUnitsCount[1] = 1;
         massOfSectors[0][0].createUnit1(planetNumber);
         massOfSectors[0][5].createUnit1(planetNumber);
-        massOfSectors[0][3].createUnit2(planetNumber);
+      //  massOfSectors[0][3].createUnit2(planetNumber);
 //        massOfSectors[1][3].createUnit2(planetNumber);
         massOfSectors[2][7].createUnit1(planetNumber);
 //        massOfSectors[2][1].createUnit2(planetNumber);

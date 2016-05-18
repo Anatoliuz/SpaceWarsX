@@ -2,7 +2,7 @@
 //  Building_Sprite.hpp
 //  space
 //
-//  Created by fix on 11/05/16.
+//  Created by fix on 18/05/16.
 //
 //
 
@@ -11,17 +11,16 @@
 
 #include <stdio.h>
 #include "building.h"
-
 class Building_Sprite: public cocos2d::Sprite{
 public:
-    building* building_in_sprite;
-    static Building_Sprite  *create();
-    static Building_Sprite *create(double x, double y);
-    void addEvents(Building_Sprite* sprite);
     
-    //Метод, который вызывается при "прикосновении" к этому объекту
-    void touchEvent(cocos2d::Touch* touch);
+    building* building_in_sprite;
+    
+    static Building_Sprite *create();
     void initOptions(Building_Sprite*);
+    
+    void set_building_sprite(building* cur_unit);
+    building* get_building_in_sprite();
+    void set_id(int num);
 };
-
 #endif /* Building_Sprite_hpp */

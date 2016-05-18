@@ -24,7 +24,11 @@ public:
     int getLeftArea();           // Возвращает номер левой зоны
     int getRightArea();          // Возвращает номер правой зоны
 
+    int get_width();
+    int get_height();
 private:
+    int width;
+    int height;
     int health;                  // Жизни
     int numberOfBuilding;        // Номер здания
     coordinate_X_Y coordinate;   // Координаты здания
