@@ -11,6 +11,7 @@
 
 #include "planet.h"
 #include "ui/CocosGUI.h"
+#include "Player_Info.hpp"
 class Planet_Sprite: public cocos2d::Sprite{
 
 
@@ -28,9 +29,6 @@ public:
     //Метод, который вызывается при "прикосновении" к этому объекту
     void touchEvent(cocos2d::Touch* touch);
     void initOptions(Planet_Sprite*);
-    
-    
-private:
-    //vector<unit> vectOfUnits;
+
 };
 #endif /* Planet_Sprite_hpp */

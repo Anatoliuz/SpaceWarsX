@@ -10,6 +10,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include "Building_Sprite.hpp"
+
 enum {
     kBackground,
     kMiddleground,

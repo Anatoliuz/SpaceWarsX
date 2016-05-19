@@ -82,8 +82,7 @@ bool HelloWorld::init()
     _tileMap->initWithTMXFile("untitled.tmx");
     _background = _tileMap->layerNamed("Background");
     
-    this->addChild(_tileMap);
-
+    //this->addChild(_tileMap);    !!!!!!!!
 
     auto listener = EventListenerMouse::create();
     listener->onMouseDown = [](cocos2d::Event* event){
@@ -102,6 +101,8 @@ bool HelloWorld::init()
             return;
         }
     };
+    
+    
     
     listener->onMouseMove = [](cocos2d::Event* event){
         // Cast Event to EventMouse for position details like above
@@ -139,20 +140,14 @@ bool HelloWorld::init()
         planet_sprite[i] = Planet_Sprite::create();
     }
 
-   
-    for (int i = 0; i < num_of_planetss; ++i) {
-        planet_array = new planet[num_of_planetss]();
-    }
-    planet_array[0] = planet(0, 200, 200, 4);
-    planet_array[1] = planet(1, 1000, 500, 4);
-    planet_array[2] = planet(2, 350, 700, 4);
     vectOfPlanets.push_back(planet(0, 200, 200, 4));
     vectOfPlanets.push_back(planet(1, 1000, 500, 4));
     vectOfPlanets.push_back(planet(2, 350, 700, 4));
-   
+    vectOfPlanets[0].setOwner(0);
+    vectOfPlanets[1].setOwner(1);
     for (int i = 0; i < num_of_planetss; ++i) {
-        planet_sprite[i]->set_planet(&planet_array[i]);
-        coordinate_X_Y coords = planet_array[i].getCoordinates();
+        planet_sprite[i]->set_planet(&vectOfPlanets[i]);
+        coordinate_X_Y coords = vectOfPlanets[i].getCoordinates();
         planet_sprite[i]->setPosition(coords.x, coords.y);
         this->addChild(planet_sprite[i], kMiddleground);
     }
@@ -181,9 +176,9 @@ bool HelloWorld::init()
     }
 
     
-    vectOfRibs.push_back(rib(planet_array[0], planet_array[1], 4));
-    vectOfRibs.push_back(rib(planet_array[0], planet_array[2], 4));
-    vectOfRibs.push_back(rib(planet_array[1], planet_array[2], 4));
+    vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[1], 4));
+    vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[2], 4));
+    vectOfRibs.push_back(rib(vectOfPlanets[1], vectOfPlanets[2], 4));
 
     
     //    int gg = 0;

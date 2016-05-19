@@ -12,6 +12,8 @@
 #include <stdio.h>
 
 struct Player_Info{
-    int player_num;
+    int player_num = 0;
+    bool players_planet_touched = 0;
+    bool enemies_planet_touched = 0;
 };
 #endif /* Player_Info_hpp */
