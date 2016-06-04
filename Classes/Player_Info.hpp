@@ -13,7 +13,9 @@
 
 struct Player_Info{
     int player_num = 0;
-    bool players_planet_touched = 0;
-    bool enemies_planet_touched = 0;
+    int planetId1 = - 1;
+    int planetId2 = -1;
+    bool is_enemy_touched = 0;
+    
 };
 #endif /* Player_Info_hpp */

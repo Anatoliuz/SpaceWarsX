@@ -12,17 +12,18 @@
 #include "planet.h"
 #include "ui/CocosGUI.h"
 #include "Player_Info.hpp"
+
 class Planet_Sprite: public cocos2d::Sprite{
 
-
+private:
+    bool touched;
 public:
     planet* planet_in_sprite;
     static Planet_Sprite *create();
     static Planet_Sprite *create(double x, double y);
     void addEvents(Planet_Sprite* sprite);
-    
-    
-
+    bool is_touched();
+    void set_touch(bool);
     void set_planet(planet*);
     planet* get_planet();
 

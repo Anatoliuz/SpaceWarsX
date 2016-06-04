@@ -10,26 +10,19 @@ bool left_button_state = false;
 coordinate_X_Y mouseCoords;
 double mouse_x = 0;
 double mouse_y = 0;
-
+HelloWorld * HelloWorld::layer = nullptr;
+Player_Info player_info;
 Scene* HelloWorld::createScene()
 {
-    // 'scene' is an autorelease object
     auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    auto layer = HelloWorld::create();
-
-    // add layer as a child to scene
+    layer = HelloWorld::create();
     scene->addChild(layer);
-
-    // return the scene
     return scene;
 }
 
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    // 1. super init first
     if ( !Layer::init() )
     {
         return false;
@@ -39,14 +32,7 @@ bool HelloWorld::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size screenSize = CCDirector::sharedDirector()->getWinSize();
     Point center = Point(screenSize.width/2 + origin.x, screenSize.height/2 + origin.y);
-    
-    
-    
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
 
-    // add a "close" icon to exit the progress. it's an autorelease object
     auto closeItem = MenuItemImage::create(
                                            "CloseNormal.png",
                                            "CloseSelected.png",
@@ -55,28 +41,16 @@ bool HelloWorld::init()
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
                                 origin.y + closeItem->getContentSize().height/2));
 
-    // create menu, it's an autorelease object
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 3);
 
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
     auto label = Label::createWithTTF("SpaceWarsX", "fonts/Marker Felt.ttf", 24);
-    
-    // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
                             origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
+    
     this->addChild(label, 1);
-    // add "HelloWorld" splash screen"
 
-    // add the sprite as a child to this layer
    
     _tileMap = new CCTMXTiledMap();
     _tileMap->initWithTMXFile("untitled.tmx");
@@ -84,57 +58,11 @@ bool HelloWorld::init()
     
     //this->addChild(_tileMap);    !!!!!!!!
 
-    auto listener = EventListenerMouse::create();
-    listener->onMouseDown = [](cocos2d::Event* event){
-        try {
-            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
-            mouseEvent->getMouseButton();
-            std::stringstream message;
-            message << "Mouse event: Button: " << mouseEvent->getMouseButton() << "pressed at point (" <<
-            mouseEvent->getLocation().x << "," << mouseEvent->getLocation().y << ")";
-            
-           // MessageBox(message.str().c_str(), "Mouse Event Details");
-            
-        }
-        catch (std::bad_cast& e){
-            // Not sure what kind of event you passed us cocos, but it was the wrong one
-            return;
-        }
-    };
+  //  my_client = new client<calcModAdapter, Network>();
+    my_controller = new controller(0);//my_client->getContoller();
     
     
-    
-    listener->onMouseMove = [](cocos2d::Event* event){
-        // Cast Event to EventMouse for position details like above
-        try {
-            EventMouse* mouseEvent = dynamic_cast<EventMouse*>(event);
-            
-            mouse_x = mouseEvent->getLocation().x;
-            mouse_y = mouseEvent->getLocation().y;
-            cocos2d::log("%f, %f", mouse_x, mouse_y);
-            
-        }
-        catch (std::bad_cast& e){
-            // Not sure what kind of event you passed us cocos, but it was the wrong one
-            return;
-        }
-        
-        cocos2d::log("Mouse moved event");
-        
-    };
-    
-    listener->onMouseScroll = [](cocos2d::Event* event){
-        cocos2d::log("Mouse wheel scrolled");
-    };
-    
-    listener->onMouseUp = [](cocos2d::Event* event){
-        cocos2d::log("Mouse button released");
-        left_button_state = false;
-    };
-    
-    _eventDispatcher->addEventListenerWithFixedPriority(listener, 1);
-
-    planet_sprite = new Planet_Sprite*[num_of_planetss];
+    planet_sprite.resize(num_of_planetss);
     for (int i = 0; i < num_of_planetss; ++i) {
         planet_sprite[i] = new Planet_Sprite();
         planet_sprite[i] = Planet_Sprite::create();
@@ -162,7 +90,6 @@ bool HelloWorld::init()
         building_sprite[i] = Building_Sprite::create();
     }
     
-    
     vector<unit> temp = calculator->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
     int id = 0;
     while(!temp.empty()){
@@ -174,30 +101,102 @@ bool HelloWorld::init()
         this->addChild(unit_sprite[id], kMiddleground);
         ++id;
     }
-
+    player_info.player_num = my_controller->playerNum;
     
+    player_info.planetId1 = 0;
+    player_info.planetId2 = 2;
     vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[1], 4));
     vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[2], 4));
     vectOfRibs.push_back(rib(vectOfPlanets[1], vectOfPlanets[2], 4));
 
-    
-    //    int gg = 0;
-//      calculator->createBuilding(vectOfPlanets[1], 1);
-//    tempo = vectOfPlanets[1].getVectorOfBuildings();
-//    building_sprite[gg]->set_building_sprite(&tempo[0]);
-//      coordinate_X_Y coords = tempo[0].getCoordinate();
-//      building_sprite[gg]->setPosition(Vec2(coords.x, coords.y));
-//      this->addChild(building_sprite[gg], kForeground);
-
-
-   
-    this->scheduleUpdate();
+        this->scheduleUpdate();
     return true;
 }
 
 
 //delta позволяет  сгладить  движения объектов в loop'e
 void HelloWorld::update(float delta){
+
+    for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
+        if( (*it)->is_touched() ) {
+            
+            if((*it)->get_planet()->getOwner() == player_info.player_num){
+                auto button = ui::Button::create("hammer.png", "hammer.png", "hammer.png");
+                player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
+                button->setTitleText("Button Text");
+                button->Node::setPosition(0,0);
+                button->cocos2d::Node::setScale(0.7);
+                (*it)->addChild(button, 4, 100);
+                (*it)->set_touch(true);
+
+                button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
+                    switch (type)
+                    {
+                        case ui::Widget::TouchEventType::BEGAN:
+                            my_controller->setCommand(player_info.planetId1, -1, 1);
+                            player_info.planetId1 = -1;
+                            (*it)->set_touch(false);
+                            (*it)->removeAllChildren();
+                            
+                            break;
+                        case ui::Widget::TouchEventType::ENDED:
+                            
+                            // std::cout << "Button 1 clicked" << std::endl;
+                            break;
+                        default:
+                            break;
+                    }
+                });
+                
+                
+
+            }
+
+            else if( (*it)->get_planet()->getNumberOfPlanet() != player_info.planetId1 ){
+                
+               Planet_Sprite* temp = get_planet_sprite_by_id(player_info.planetId1);
+                temp->removeAllChildren();
+                if ( player_info.planetId1 < 0 ) {
+                    player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
+                    continue;
+                }
+
+                
+                player_info.planetId2 = (*it)->get_planet()->getNumberOfPlanet();
+                
+                auto button = ui::Button::create("attack.png", "attack.png", "attack.png");
+                
+                button->Node::setPosition(0,0);
+                
+                button->cocos2d::Node::setScale(0.7);
+                (*it)->addChild(button,6);
+                
+                button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
+                    switch (type)
+                    {
+                        case ui::Widget::TouchEventType::BEGAN:
+                            my_controller->setCommand(player_info.planetId1, player_info.planetId2, 2);
+                            player_info.planetId1 = -1;
+                            player_info.planetId2 = -1;
+
+
+                            break;
+                        case ui::Widget::TouchEventType::ENDED:
+                            
+                            (*it)->removeAllChildren();
+
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            
+            
+            }
+        }
+    }
+    
+    
 
     calculator->doStep(vectOfPlanets, vectOfRibs, vectorOfShells, 4);
     vector<unit> temp = calculator->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
@@ -212,7 +211,7 @@ void HelloWorld::update(float delta){
         ++id;
     }
 
-    
+
 }
 
 
@@ -262,3 +261,16 @@ void HelloWorld::set_max_unit_index(int num){
     max  = num;
 }
 
+HelloWorld* HelloWorld::get_instance(){
+    return layer;
+}
+
+Planet_Sprite* HelloWorld::get_planet_sprite_by_id(int num_of_planet ){
+    for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
+        
+        if ((*it)->get_planet()->getNumberOfPlanet() == num_of_planet) {
+            return *it;
+        }
+        
+    }
+}
