@@ -35,7 +35,7 @@ string controller::getAction()
                 " " +
                 std::to_string(1) + // кол-во кораблей
                 " " +
-                std::to_string(1) + // поменять 1 на playerInfo.playerNum
+                std::to_string(playerNum) + // поменять 1 на playerInfo.playerNum
                 " ||";
         reset(); // т.к действие обработано, надо его обнулить
         return result;

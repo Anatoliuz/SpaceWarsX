@@ -50,14 +50,14 @@ void client<calculationModule, NetWorkModule>::doWork()
    // наверное все
     string input  = "";
     string output = "";
-    // получаем команды от сервера
-    input = "||" + netModule -> getCommandQuery(); // ||_com1_||_com2_||
+    // получаем действие игрока из контролера
+    output = myController -> getAction();// + " doStep ||"; // _com_||
+    // отправляем команду на сервер, даже если пустая, чтобы сервер знал, что с нми все ок
+    netModule -> sendCommands(output);    // получаем команды от сервера
+    input = "||" + netModule -> getCommandQuery();// + "|| doStep ||"; // ||_com1_||_com2_||
     processor -> pushCommands(input); // кладем их в процессор команд
     processor -> doCommands(); // выполянем команды
-    // получаем действие игрока из контролера
-    output = myController -> getAction(); // _com_||
-    // отправляем команду на сервер, даже если пустая, чтобы сервер знал, что с нми все ок
-    netModule -> sendCommands(output);
+ 
 }
 
 template<class calculationModule, class NetWorkModule>
