@@ -51,7 +51,7 @@ public:
     static HelloWorld* get_instance();
     sector **planet_sector;
     void set_max_unit_index(int number);
-    
+    void Manage_Planets();
     Unit_Sprite** unit_sprite;
     
     

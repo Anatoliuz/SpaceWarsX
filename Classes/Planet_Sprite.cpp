@@ -39,33 +39,8 @@ void Planet_Sprite::addEvents(Planet_Sprite* sprite){
         auto bounds = event->getCurrentTarget()->getBoundingBox();
         
         if (bounds.containsPoint(touch->getLocation())){
-            
-//                auto button = ui::Button::create("hammer.png", "hammer.png", "hammer.png");
-//                
-//                //button->setTitleText("Button Text");
-//                
-//                button->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type){
-//                    switch (type)
-//                    {
-//                        case ui::Widget::TouchEventType::BEGAN:
-//                            break;
-//                        case ui::Widget::TouchEventType::ENDED:
-//                            this->removeAllChildren();
-//                            
-//                            // std::cout << "Button 1 clicked" << std::endl;
-//                            break;
-//                        default:
-//                            break;
-//                    }
-//                });
-//                button->Node::setPosition(0,0);
-//                
-//                button->cocos2d::Node::setScale(0.7);
-//                this->addChild(button,6);
             touched = true;
-                return true;
-            
-            
+            return true;
         }
         
         return true;

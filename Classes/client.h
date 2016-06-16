@@ -2,7 +2,12 @@
 #define CLIENT_H
 
 #include <commandProcessor.h>
-
+//*
+#include <vector>
+#include <planet.h>
+#include <rib.h>
+#include <shell.h>
+//*
 #include <includeMechanics.h>
 #include <controller.h>
 
@@ -15,7 +20,7 @@ class client
     ~client();
     void doWork();
     controller* getContoller();
-
+    vector<unit> getVectorOfUnits(vector<planet> vectorOfPlanets, vector<rib> vectorOfRibs, int numbOfPlayers);
  private:
     comProcessor<calculationModule>* processor;
     NetWorkModule* netModule;
@@ -24,6 +29,12 @@ class client
     bool active;
     int clientId; // playerId
 };
+
+template<class calculationModule, class NetWorkModule>
+vector<unit> client<calculationModule, NetWorkModule>::getVectorOfUnits(vector<planet> vectorOfPlanets, vector<rib> vectorOfRibs, int numbOfPlayers)
+{
+    return calculationMod->getVectorOfUnits(vectorOfPlanets, vectorOfRibs, numbOfPlayers);
+}
 
 template<class calculationModule, class NetWorkModule>
 controller* client<calculationModule, NetWorkModule>::getContoller()
@@ -65,9 +76,9 @@ client<calculationModule, NetWorkModule>::client()
     processor      = new comProcessor<calculationModule> (calculationMod);
     netModule      = new NetWorkModule();
 
-   // int playerNumber = netModule -> getPlayerNumber();
-    calculationMod = new calculationModule(1 /*playerNumber*/);
-    myController   = new controller(1 /*playerNumber*/);
+    int playerNumber = netModule -> getPlayerNumber();
+    calculationMod = new calculationModule(playerNumber);
+    myController   = new controller(playerNumber);
 
     cout << "OK\n";
 }

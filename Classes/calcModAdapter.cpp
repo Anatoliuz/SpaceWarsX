@@ -9,6 +9,11 @@ calcModAdapter::~calcModAdapter()
     if(PRINTONSCREEN) cout << "~calcModAdapter()\n";
 }
 
+vector<unit> calcModAdapter::getVectorOfUnits(vector<planet> vectorOfPlanets, vector<rib> vectorOfRibs, int numbOfPlayers)
+{
+    return calcMod->getVectorOfUnits(vectorOfPlanets, vectorOfRibs, numbOfPlayers);
+}
+
 calcModAdapter::calcModAdapter(int playerNumber)
 {
     calcMod = new calculationMod();
