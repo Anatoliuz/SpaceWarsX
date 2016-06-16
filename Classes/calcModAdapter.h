@@ -12,6 +12,7 @@ class calcModAdapter
     ~calcModAdapter();
     void move (int planetId1, int planetId2, int number, int player);
     void doStep();
+    void setData(dataModel* data);
     void createBuilding (int planetId, int playerId);
     vector<unit> getVectorOfUnits(vector<planet> vectorOfPlanets, vector<rib> vectorOfRibs, int numbOfPlayers);
     

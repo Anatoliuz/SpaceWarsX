@@ -108,6 +108,13 @@ bool HelloWorld::init()
     vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[2], 4));
     vectOfRibs.push_back(rib(vectOfPlanets[1], vectOfPlanets[2], 4));
 
+    // в calcModAdapter вызывыается doStep, который вызывает doStep олега, т.к doStep олега нужны планеты и ребра, то указатель нан их есть в calcModAdapter, но т.к они создаюстя тут, причем создаются вперемешку со спрайтами(т.е отделить в функцию и вынести не варик), тут будет создана структура dataModel и послана в calcModAdapter
+    dataModel* data = new dataModel(4, player_info.player_num); // кол-во игроков 4 и номер клиента
+    data->planets = vectOfPlanets;
+    data->ribs = vectOfRibs;
+    data->shells = vectorOfShells;
+    my_client->calculationMod->setData(data);
+    // вот и конец этому ужасу
     this->scheduleUpdate();
     return true;
 }

@@ -21,10 +21,11 @@ class client
     void doWork();
     controller* getContoller();
     vector<unit> getVectorOfUnits(vector<planet> vectorOfPlanets, vector<rib> vectorOfRibs, int numbOfPlayers);
+    calculationModule* calculationMod;
  private:
     comProcessor<calculationModule>* processor;
     NetWorkModule* netModule;
-    calculationModule* calculationMod;
+  //  calculationModule* calculationMod;
     controller* myController;
     bool active;
     int clientId; // playerId
@@ -73,11 +74,11 @@ template<class calculationModule, class NetWorkModule>
 client<calculationModule, NetWorkModule>::client()
 {
     active = false;
-    processor      = new comProcessor<calculationModule> (calculationMod);
     netModule      = new NetWorkModule();
 
     int playerNumber = netModule -> getPlayerNumber();
     calculationMod = new calculationModule(playerNumber);
+    processor = new comProcessor<calculationModule>(calculationMod);
     myController   = new controller(playerNumber);
 
     cout << "OK\n";

@@ -49,6 +49,11 @@ void calcModAdapter::move (int planetId1, int planetId2, int number, int player)
     cout << "\n " << planetId1 << " " << planetId2 << " " << number << " " << player << "\n ";
 }
 
+void calcModAdapter::setData(dataModel* data_)
+{
+    data = data_;
+}
+
 void calcModAdapter::doStep()
 {
     cout << "\ndoStep\n";
