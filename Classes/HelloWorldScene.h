@@ -17,14 +17,16 @@
 enum {
     kBackground,
     kMiddleground,
-    kForeground
+    kForeground,
+    kUnit
 };
 
 enum {
     kSpriteRocket,
     kSpritePlanet,
     kSpriteBoost,
-    kSpriteStar
+    kSpriteStar,
+    
 };
 
 typedef enum gamestates {
@@ -47,19 +49,21 @@ private:
     controller* my_controller;
    client<calcModAdapter, Network>* my_client;
 public:
+    
+    void set_planets();
+    void set_background();
     CREATE_FUNC(HelloWorld);
     static HelloWorld* get_instance();
     sector **planet_sector;
     void set_max_unit_index(int number);
     void Manage_Planets();
-    Unit_Sprite** unit_sprite;
     
     
     
     vector<Planet_Sprite*> planet_sprite;
-    planet* planet_array;
-    Building_Sprite** building_sprite;
-    building* building_array;
+    
+    vector<Unit_Sprite*> unit_sprite;
+    vector<Building_Sprite*> building_sprite;
     
     calculationMod* calculator;
     vector<building> tempo;

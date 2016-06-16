@@ -4,8 +4,8 @@ USING_NS_CC;
 
 int num_of_planetss = 3;
 int num_of_playerss = 4;
-int num_of_units = 500;
-
+int num_of_units = 0;
+int num_of_buildings = 100;
 bool left_button_state = false;
 coordinate_X_Y mouseCoords;
 double mouse_x = 0;
@@ -27,70 +27,27 @@ bool HelloWorld::init()
     {
         return false;
     }
-    left_button_state = false;
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    Size screenSize = CCDirector::sharedDirector()->getWinSize();
-    Point center = Point(screenSize.width/2 + origin.x, screenSize.height/2 + origin.y);
-
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+    set_background();
     
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 3);
-
-    auto label = Label::createWithTTF("SpaceWarsX", "fonts/Marker Felt.ttf", 24);
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-    
-    this->addChild(label, 1);
-
-   
-    _tileMap = new CCTMXTiledMap();
-    _tileMap->initWithTMXFile("untitled.tmx");
-    _background = _tileMap->layerNamed("Background");
-    
-    //this->addChild(_tileMap);    !!!!!!!!
-
     my_client = new client<calcModAdapter, Network>();
     my_controller = my_client->getContoller();
     
-    
-    planet_sprite.resize(num_of_planetss);
-    for (int i = 0; i < num_of_planetss; ++i) {
-        planet_sprite[i] = new Planet_Sprite();
-        planet_sprite[i] = Planet_Sprite::create();
-    }
 
-    vectOfPlanets.push_back(planet(0, 200, 200, 4));
-    vectOfPlanets.push_back(planet(1, 1000, 500, 4));
-    vectOfPlanets.push_back(planet(2, 350, 700, 4));
-    vectOfPlanets[0].setOwner(0);
-    vectOfPlanets[1].setOwner(1);
-    for (int i = 0; i < num_of_planetss; ++i) {
-        planet_sprite[i]->set_planet(&vectOfPlanets[i]);
-        coordinate_X_Y coords = vectOfPlanets[i].getCoordinates();
-        planet_sprite[i]->setPosition(coords.x, coords.y);
-        this->addChild(planet_sprite[i], kMiddleground);
-    }
-    unit_sprite = new Unit_Sprite*[100000];
-    for (int i = 0; i < 100000; ++i) {
-        unit_sprite[i] = new Unit_Sprite();
-        unit_sprite[i] = Unit_Sprite::create();
-    }
-    building_sprite = new Building_Sprite*[1];
-    for (int i = 0; i < 1; ++i) {
+    building_sprite.resize(num_of_buildings);
+    for (int i = 0; i < num_of_buildings; ++i) {
         building_sprite[i] = new Building_Sprite();
         building_sprite[i] = Building_Sprite::create();
     }
+
+    set_planets();
     
     vector<unit> temp = my_client->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
+    num_of_units = temp.size();
+    unit_sprite.resize(num_of_units);
+    for (int i = 0; i < num_of_units; ++i) {
+        unit_sprite[i] = new Unit_Sprite();
+        unit_sprite[i] = Unit_Sprite::create();
+    }
     int id = 0;
     while(!temp.empty()){
         unit temp_unit = temp.back();
@@ -98,7 +55,7 @@ bool HelloWorld::init()
         coordinate_X_Y coords = temp_unit.get_unit_coordinates();
         unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
         temp.pop_back();
-        this->addChild(unit_sprite[id], kMiddleground);
+        this->addChild(unit_sprite[id], kMiddleground, kUnit);
         ++id;
     }
     player_info.player_num = my_controller->playerNum;
@@ -114,6 +71,7 @@ bool HelloWorld::init()
     data->ribs = vectOfRibs;
     data->shells = vectorOfShells;
     my_client->calculationMod->setData(data);
+   
     // вот и конец этому ужасу
     this->scheduleUpdate();
     return true;
@@ -122,13 +80,23 @@ bool HelloWorld::init()
 
 //delta позволяет  сгладить  движения объектов в loop'e
 void HelloWorld::update(float delta){
+    while (this->getChildByTag(kUnit)) {
+        this->removeChildByTag(kUnit);
+
+    }
 
     
     Manage_Planets();
-    //calculator->doStep(vectOfPlanets, vectOfRibs, vectorOfShells, 4);
+
+        
     my_client->doWork();
     vector<unit> temp = my_client->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
-    int size = temp.size();
+    num_of_units = temp.size();
+    unit_sprite.resize(num_of_units);
+    for (int i = 0; i < num_of_units; ++i) {
+        unit_sprite[i] = new Unit_Sprite();
+        unit_sprite[i] = Unit_Sprite::create();
+    }
     int id = 0;
     while(!temp.empty()){
         unit temp_unit = temp.back();
@@ -136,6 +104,7 @@ void HelloWorld::update(float delta){
         coordinate_X_Y coords = temp_unit.get_unit_coordinates();
         unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
         temp.pop_back();
+        this->addChild(unit_sprite[id], kMiddleground, kUnit);
         ++id;
     }
 
@@ -292,4 +261,59 @@ void HelloWorld::Manage_Planets(){
         
     }
 
+}
+
+void HelloWorld::set_planets(){
+    
+    planet_sprite.resize(num_of_planetss);
+    for (int i = 0; i < num_of_planetss; ++i) {
+        planet_sprite[i] = new Planet_Sprite();
+        planet_sprite[i] = Planet_Sprite::create();
+    }
+    
+    vectOfPlanets.push_back(planet(0, 200, 200, 4));
+    vectOfPlanets.push_back(planet(1, 1000, 500, 4));
+    vectOfPlanets.push_back(planet(2, 350, 700, 4));
+    vectOfPlanets[0].setOwner(0);
+    vectOfPlanets[1].setOwner(1);
+    for (int i = 0; i < num_of_planetss; ++i) {
+        planet_sprite[i]->set_planet(&vectOfPlanets[i]);
+        coordinate_X_Y coords = vectOfPlanets[i].getCoordinates();
+        planet_sprite[i]->setPosition(coords.x, coords.y);
+        this->addChild(planet_sprite[i], kMiddleground);
+    }
+}
+
+void HelloWorld::set_background(){
+
+    left_button_state = false;
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Size screenSize = CCDirector::sharedDirector()->getWinSize();
+    Point center = Point(screenSize.width/2 + origin.x, screenSize.height/2 + origin.y);
+    
+    auto closeItem = MenuItemImage::create(
+                                           "CloseNormal.png",
+                                           "CloseSelected.png",
+                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+    
+    closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
+                                origin.y + closeItem->getContentSize().height/2));
+    
+    auto menu = Menu::create(closeItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 3);
+    
+    auto label = Label::createWithTTF("SpaceWarsX", "fonts/Marker Felt.ttf", 24);
+    label->setPosition(Vec2(origin.x + visibleSize.width/2,
+                            origin.y + visibleSize.height - label->getContentSize().height));
+    
+    this->addChild(label, 1);
+    
+    
+    _tileMap = new CCTMXTiledMap();
+    _tileMap->initWithTMXFile("untitled.tmx");
+    _background = _tileMap->layerNamed("Background");
+    
+   // this->addChild(_tileMap);
 }

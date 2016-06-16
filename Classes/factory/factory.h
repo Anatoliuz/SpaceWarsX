@@ -37,8 +37,9 @@ template<class Receiver>
 CommandFactory<Receiver>::CommandFactory(Receiver* r_)
 {
    r = r_;
-   factories = new concreteFactory<Receiver>*[1]; // заполнение абстрактной фабрики
    sizeFactory = 3; // кол-во фабрик               конкретными фабриками
+    
+   factories = new concreteFactory<Receiver>*[sizeFactory](); // заполнение абстрактной фабрики
    factories[0] = new comMoveFactory<Receiver>          ("move");
    factories[1] = new comDoStepFactory<Receiver>        ("doStep");
    factories[2] = new comCreateBuildingFactory<Receiver>("createBuilding");
