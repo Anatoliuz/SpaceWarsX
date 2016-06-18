@@ -43,7 +43,6 @@ void calculationMod::changeUnitsState(planet &currentPlanet, int state, int n, i
 
 void calculationMod::createBuilding(planet &onePlanet, int playerNumber){
     vector<building> &vectorOfBuildings = onePlanet.getVectorOfBuildings();
-
     if (vectorOfBuildings.size() == 1 && !onePlanet.isWar() && onePlanet.getOwner() == playerNumber){
         int numberOfBuilding = vectorOfBuildings[0].getNumberOfBuilding();
         coordinate_X_Y coordinate = onePlanet.getCoordinates();
@@ -60,7 +59,7 @@ void calculationMod::createBuilding(planet &onePlanet, int playerNumber){
             vectorOfBuildings.push_back(newBuilding);
         }
     }
-    else if (vectorOfBuildings.size() == 0 && !onePlanet.isWar() && onePlanet.getUnitsCount(playerNumber) > 0)
+    else if (vectorOfBuildings.size() == 0 && !onePlanet.isWar() && onePlanet.getOwner() == playerNumber/* && onePlanet.getUnitsCount(playerNumber) > 0*/)
     {
         onePlanet.setOwner(playerNumber);
         coordinate_X_Y coordinate = onePlanet.getCoordinates();

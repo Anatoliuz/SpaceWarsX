@@ -17,7 +17,7 @@ vector<unit> calcModAdapter::getVectorOfUnits(vector<planet> vectorOfPlanets, ve
 calcModAdapter::calcModAdapter(int playerNumber)
 {
     calcMod = new calculationMod();
-    data    = new dataModel(0, playerNumber); // 0 планет и номер игрока
+  //  data    = new dataModel(0, playerNumber); // 0 планет и номер игрока
 
     /*
     // создание планет, можно убрать
@@ -57,15 +57,15 @@ void calcModAdapter::setData(dataModel* data_)
 void calcModAdapter::doStep()
 {
     cout << "\ndoStep\n";
-    calcMod -> doStep(data -> planets, data -> ribs, data -> shells, data -> numberOfPlayers);
+    calcMod -> doStep(*(data -> planets), *(data -> ribs), *(data -> shells), data -> numberOfPlayers);
 }
 
 
 planet& calcModAdapter::findPlanet(int planetId)
 {
-    for ( size_t i = 0; i < data -> planets.size(); i++) {
-        if (planetId == data -> planets[i].getNumberOfPlanet()) {
-            return data -> planets[i];
+    for (size_t i = 0; i < (*(data -> planets)).size(); i++) {
+        if (planetId == (*(data -> planets))[i].getNumberOfPlanet()) {//*(data -> planets)[i].getNumberOfPlanet()) {
+            return (*(data -> planets))[i];
         }
     }
     assert (false); // не найдена планета откуда посылаются корабли

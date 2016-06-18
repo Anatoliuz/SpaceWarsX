@@ -11,14 +11,14 @@
 Unit_Sprite* Unit_Sprite::create(int owner){
     Unit_Sprite * sprite = new Unit_Sprite();
     if (owner == 0) {
-    if (sprite->initWithFile("ufo_2.png")) {
+    if (sprite->initWithFile("ufo_0.png")) {
         sprite->autorelease();
         sprite->initOptions(sprite, owner);
         return sprite;
     }
     }
     else {
-        if (sprite->initWithFile("ufo_0.png")) {
+        if (sprite->initWithFile("ufo_2.png")) {
             sprite->autorelease();
             sprite->initOptions(sprite, owner);
             return sprite;

@@ -22,7 +22,7 @@ string controller::getAction()
         result = " createBuilding " +
                 std::to_string(planetId1) +
                 " " +
-                std::to_string(1) +
+                std::to_string(playerNum) +
                 " ||";
         reset(); // т.к действие обработано, надо его обнулить
         return result;

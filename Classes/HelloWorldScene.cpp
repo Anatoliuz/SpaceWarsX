@@ -2,14 +2,7 @@
 
 USING_NS_CC;
 
-int num_of_planetss = 3;
-int num_of_playerss = 4;
-int num_of_units = 0;
-int num_of_buildings = 100;
-bool left_button_state = false;
-coordinate_X_Y mouseCoords;
-double mouse_x = 0;
-double mouse_y = 0;
+
 HelloWorld * HelloWorld::layer = nullptr;
 Player_Info player_info;
 Scene* HelloWorld::createScene()
@@ -36,7 +29,8 @@ bool HelloWorld::init()
   
 
     set_planets();
-    
+
+
     manage_units();
     player_info.player_num = my_controller->playerNum;
     
@@ -47,9 +41,9 @@ bool HelloWorld::init()
 
     // в calcModAdapter вызывыается doStep, который вызывает doStep олега, т.к doStep олега нужны планеты и ребра, то указатель нан их есть в calcModAdapter, но т.к они создаюстя тут, причем создаются вперемешку со спрайтами(т.е отделить в функцию и вынести не варик), тут будет создана структура dataModel и послана в calcModAdapter
     dataModel* data = new dataModel(4, player_info.player_num); // кол-во игроков 4 и номер клиента
-    data->planets = vectOfPlanets;
-    data->ribs = vectOfRibs;
-    data->shells = vectorOfShells;
+    data->planets = &vectOfPlanets;
+    data->ribs = &vectOfRibs;
+    data->shells = &vectorOfShells;
     my_client->calculationMod->setData(data);
     //draw_shells();
     // вот и конец этому ужасу
@@ -59,7 +53,8 @@ bool HelloWorld::init()
 
 
 //delta позволяет  сгладить  движения объектов в loop'e
-void HelloWorld::update(float delta){
+void HelloWorld::update(float delta)
+{
     while (this->getChildByTag(kUnit)) {
         this->removeChildByTag(kUnit);
     }
@@ -68,9 +63,8 @@ void HelloWorld::update(float delta){
     }
 
     
-    Manage_Planets();
-
-        
+    manage_planets();
+    draw_buildings_on_planet();        
     my_client->doWork();
     manage_units();
 
@@ -109,15 +103,6 @@ void HelloWorld::onTouchCancelled(Touch* touch, Event* event)
     cocos2d::log("touch cancelled");
 }
 
-bool HelloWorld::isLeftButtonPressed(){
-    return left_button_state;
-}
-
-coordinate_X_Y HelloWorld::getMouseCoordinates(){
-    mouseCoords.x = mouse_x;
-    mouseCoords.y = mouse_y;
-    return mouseCoords;
-}
 
 void HelloWorld::set_max_unit_index(int num){
     max  = num;
@@ -136,49 +121,40 @@ Planet_Sprite* HelloWorld::get_planet_sprite_by_id(int num_of_planet ){
         
     }
 }
-void HelloWorld::Manage_Planets(){
+void HelloWorld::manage_planets(){
+    
+    
     for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
-        
+
         if( (*it)->is_touched() ) {
-            
+
             if((*it)->get_planet()->getOwner() == player_info.player_num){
+                
                 auto button = ui::Button::create("hammer.png", "hammer.png", "hammer.png");
                 player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
-                //button->setTitleText("Button Text");
+                player_info.is_touched = true;
+
                 button->Node::setPosition(0,0);
                 button->cocos2d::Node::setScale(0.7);
                 (*it)->addChild(button, 4, 100);
-                
                 button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
                     switch (type)
                     {
                         case ui::Widget::TouchEventType::BEGAN:
                             my_controller->setCommand(player_info.planetId1, -1, 1);
-                            
                             player_info.planetId1 = -1;
                             (*it)->set_touch(false);
                             (*it)->removeAllChildren();
-                            
+                            player_info.is_touched = false;
+
                             if (!(*it)->is_touched()) {
+                                my_controller->setCommand((*it)->get_planet()->getNumberOfPlanet(), 0, 1);
+                                // 0 - любое число, 1 - тип действия, тут 1 - постройка, 1 ый параметр номер планеты где строится
+                                /*
                                 my_client->calculationMod->createBuilding((*it)->get_planet()->
-                                                                          getNumberOfPlanet(), player_info.player_num );
-                                vector<building> temp = (*it)->get_planet()->getVectorOfBuildings();
-                                num_of_buildings = temp.size();
-                                building_sprite.resize(num_of_buildings);
-                                for (int i = 0; i < num_of_buildings; ++i) {
-                                    building_sprite[i] = new Building_Sprite();
-                                    building_sprite[i] = Building_Sprite::create();
-                                }
-                                int id = 0;
-                                while(!temp.empty()){
-                                    building temp_unit = temp.back();
-                                    building_sprite[id]->set_building_sprite(&temp.back());
-                                    coordinate_X_Y coords = temp_unit.getCoordinate();
-                                    building_sprite[id]->setPosition(Vec2(coords.x, coords.y));
-                                    temp.pop_back();
-                                    this->addChild(building_sprite[id], kMiddleground, kBuilding);
-                                    ++id;
-                                }
+                                                                          getNumberOfPlanet(), player_info.player_num );//!!!!Не создает здание
+                                */
+
                                 
                             }
                             break;
@@ -188,30 +164,26 @@ void HelloWorld::Manage_Planets(){
                             break;
                     }
                 });
+           
+    
                 
-               
                 
             }
             
             else {
-                if(  player_info.planetId1 >= 0 &&  player_info.planetId2 < 0 ){
-                    player_info.planetId2 = (*it)->get_planet()->getNumberOfPlanet();
-                    continue;
-                }
-                
+           
                 if( player_info.planetId1 >= 0 ) {
                     
-                    Planet_Sprite* temp = get_planet_sprite_by_id(player_info.planetId1);
-                    temp->removeAllChildren();
-                    temp->set_touch(false);
+                
                     
+                    if(player_info.planetId2>= 0){
                     
-                    auto button = ui::Button::create("attack.png", "attack.png", "attack.png");
-                    button->Node::setPosition(0,0);
-                    button->cocos2d::Node::setScale(0.7);
-                    (*it)->addChild(button,6);
-                    
-                    button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
+                        auto button = ui::Button::create("attack.png", "attack.png", "attack.png");
+                        button->Node::setPosition(0,0);
+                        button->cocos2d::Node::setScale(0.7);
+                        (*it)->addChild(button,6);
+                  
+                        button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
                         switch (type)
                         {
                             case ui::Widget::TouchEventType::BEGAN:
@@ -229,33 +201,20 @@ void HelloWorld::Manage_Planets(){
                         }
                     });
                     
-                    if (player_info.planetId1 < 0 &&
-                        player_info.planetId2 < 0) {
-                        Planet_Sprite* temp1 = get_planet_sprite_by_id(player_info.planetId1);
-                        temp1->set_touch(false);
-                        Planet_Sprite* temp2 = get_planet_sprite_by_id(player_info.planetId2);
-                        temp2->set_touch(false);
                     }
-                    
-                }
-                if (player_info.planetId1 < 0) {
-                    player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
                 }
             }
-            
-            
         }
-        
     }
-
 }
 void HelloWorld::manage_units(){
     vector<unit> temp = my_client->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
-    num_of_units = temp.size();
+     int   num_of_units = temp.size();
     unit_sprite.resize(num_of_units);
     for (int i = 0; i < num_of_units; ++i) {
         unit_sprite[i] = new Unit_Sprite();
     }
+    
     int id = 0;
     while(!temp.empty()){
         unit temp_unit = temp.back();
@@ -273,19 +232,24 @@ void HelloWorld::manage_units(){
 }
 void HelloWorld::set_planets(){
     
-    planet_sprite.resize(num_of_planetss);
-    for (int i = 0; i < num_of_planetss; ++i) {
+    
+    vectOfPlanets.push_back(planet(0, 200, 300, 4));
+    vectOfPlanets.push_back(planet(1, 700, 300, 4));
+    vectOfPlanets.push_back(planet(2, 1200, 300, 4));
+    vectOfPlanets.push_back(planet(3, 1200, 500, 4));
+
+    num_of_planets = vectOfPlanets.size();
+    vectOfPlanets[0].setOwner(0);
+    vectOfPlanets[1].setOwner(0);
+    vectOfPlanets[2].setOwner(1);
+    vectOfPlanets[3].setOwner(1);
+    planet_sprite.resize(num_of_planets);
+    for (int i = 0; i < num_of_planets; ++i) {
         planet_sprite[i] = new Planet_Sprite();
         planet_sprite[i] = Planet_Sprite::create();
     }
-    
-    vectOfPlanets.push_back(planet(0, 200, 200, 4));
-    vectOfPlanets.push_back(planet(1, 1000, 500, 4));
-    vectOfPlanets.push_back(planet(2, 350, 700, 4));
-    vectOfPlanets[0].setOwner(1);
-    vectOfPlanets[1].setOwner(0);
-    vectOfPlanets[2].setOwner(1);
-    for (int i = 0; i < num_of_planetss; ++i) {
+
+    for (int i = 0; i < num_of_planets; ++i) {
         planet_sprite[i]->set_planet(&vectOfPlanets[i]);
         coordinate_X_Y coords = vectOfPlanets[i].getCoordinates();
         planet_sprite[i]->setPosition(coords.x, coords.y);
@@ -317,7 +281,7 @@ void HelloWorld::draw_shells(){
 }
 void HelloWorld::set_background(){
 
-    left_button_state = false;
+    
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     Size screenSize = CCDirector::sharedDirector()->getWinSize();
@@ -347,4 +311,27 @@ void HelloWorld::set_background(){
     _background = _tileMap->layerNamed("Background");
     
    // this->addChild(_tileMap);
+}
+
+void HelloWorld::draw_buildings_on_planet(){
+    for (auto i = 0; i < vectOfPlanets.size(); ++i){
+    
+    vector<building> temp = vectOfPlanets[i].getVectorOfBuildings();
+    int num_of_buildings = temp.size();
+    building_sprite.resize(num_of_buildings);
+    for (int i = 0; i < num_of_buildings; ++i) {
+        building_sprite[i] = new Building_Sprite();
+        building_sprite[i] = Building_Sprite::create();
+    }
+    int id = 0;
+    while(!temp.empty()){
+        building temp_unit = temp.back();
+        building_sprite[id]->set_building_sprite(&temp.back());
+        coordinate_X_Y coords = temp_unit.getCoordinate();
+        building_sprite[id]->setPosition(Vec2(coords.x, coords.y));
+        temp.pop_back();
+        this->addChild(building_sprite[id], kMiddleground, kBuilding);
+        ++id;
+    }
+    }
 }

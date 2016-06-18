@@ -12,9 +12,9 @@ struct dataModel
  public:
     dataModel(int numberOfPlayers, int playerId_);
 
-    vector<planet> planets;
-    vector<rib>    ribs;
-    vector<shell>  shells;
+    vector<planet>* planets;
+    vector<rib>*    ribs;
+    vector<shell>*  shells;
     int numberOfPlayers;
     int playerId;
 
