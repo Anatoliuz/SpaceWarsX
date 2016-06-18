@@ -8,19 +8,30 @@
 
 #include "Unit_Sprite.hpp"
 
-Unit_Sprite* Unit_Sprite::create(){
+Unit_Sprite* Unit_Sprite::create(int owner){
     Unit_Sprite * sprite = new Unit_Sprite();
-    if (sprite->initWithFile("rocket.png")) {
+    if (owner == 0) {
+    if (sprite->initWithFile("ufo_2.png")) {
         sprite->autorelease();
-        sprite->initOptions(sprite);
+        sprite->initOptions(sprite, owner);
         return sprite;
     }
+    }
+    else {
+        if (sprite->initWithFile("ufo_0.png")) {
+            sprite->autorelease();
+            sprite->initOptions(sprite, owner);
+            return sprite;
+        }
+
+    }
+    
     CC_SAFE_DELETE(sprite);
     return NULL;
 }
-void Unit_Sprite::initOptions(Unit_Sprite* unit_sprite){
+void Unit_Sprite::initOptions(Unit_Sprite* unit_sprite, int owner){
 
-    unit *temp = new unit(0, 0, 1); //!!!
+    unit *temp = new unit(0, 0, 1, owner); //!!!
     unit_sprite->setScaleX(temp->get_unit_width()/unit_sprite->getContentSize().width);
     unit_sprite->setScaleY(temp->get_unit_height()/unit_sprite->getContentSize().height);
     delete temp;

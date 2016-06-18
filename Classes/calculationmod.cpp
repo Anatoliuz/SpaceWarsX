@@ -597,7 +597,7 @@ void calculationMod::createOnPlanet(planet &onePlanet){
             }
 
             list<unit> &listOfUnits = massOfPlayersList[onePlanet.getOwner()];
-            unit newUnit(coordinate.x, coordinate.y, onePlanet.getNumberOfPlanet());
+            unit newUnit(coordinate.x, coordinate.y, onePlanet.getNumberOfPlanet(), onePlanet.getOwner());
 
             listOfUnits.push_back(newUnit);
             onePlanet.incrementUnitsCount(onePlanet.getOwner());

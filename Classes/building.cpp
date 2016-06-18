@@ -15,7 +15,7 @@ building::building(coordinate_X_Y coordinate, int leftArea, int rightArea, int n
 
     health = 150;
     orbitForCreation = 0;
-    create = 44;
+    create = 220;
     countCreate = 0;
 }
 

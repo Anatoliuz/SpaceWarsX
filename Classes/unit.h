@@ -8,7 +8,7 @@
 class unit{
 public:
     unit();
-    unit(double X, double Y, int planetNumber);
+    unit(double X, double Y, int planetNumber, int owner_num);
 
     bool isChange();     // Возвращает true, если юнит должен выйти из ячейки
     bool isRupture();    // Возвращает true, если появляется разрыв
@@ -48,8 +48,9 @@ public:
     int get_unit_width();
     
     int get_id();
-    
+    int get_owner_num();
 private:
+    int owner_num; 
     
     int health;   // Жизни
     int speed;    // Скорость

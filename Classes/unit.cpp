@@ -24,10 +24,11 @@ coordinate_X_Y unit::get_unit_coordinates(){
 }
 
 
-unit::unit(double X, double Y, int planetNumber)
+unit::unit(double X, double Y, int planetNumber, int owner)
 {
     static int unit_id = 0;
-
+    owner_num = owner;
+    
     unit_id++;
     internal_id = unit_id;
     health = 100;
@@ -153,4 +154,8 @@ void unit::writeCoordinates(){
 }
 int  unit::get_id(){
     return internal_id;
+}
+
+int unit::get_owner_num(){
+    return owner_num;
 }

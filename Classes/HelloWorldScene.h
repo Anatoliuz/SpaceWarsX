@@ -10,7 +10,6 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include "Building_Sprite.hpp"
-//#include "Test.hpp"
 #include "client.h"
 #include "Network.h"
 #include "calcModAdapter.h"
@@ -18,7 +17,9 @@ enum {
     kBackground,
     kMiddleground,
     kForeground,
-    kUnit
+    kUnit,
+    kBuilding,
+    kShell
 };
 
 enum {
@@ -39,16 +40,8 @@ typedef enum gamestates {
 
 class HelloWorld : public cocos2d::Layer
 {
-private:
-    std::list<unit> *list_units;
-    std::list<ribStruct> *list_units_ribs;
-    cocos2d::Label* labelTouchInfo;
-    coordinate_X_Y mouse_coords;
-    static HelloWorld* layer;
-    int max;
-    controller* my_controller;
-   client<calcModAdapter, Network>* my_client;
 public:
+    void manage_units();
     
     void set_planets();
     void set_background();
@@ -99,6 +92,16 @@ public:
     void toGameScene();
     void  transitionToGameScene();
     void startGame();
+    void draw_shells();
+private:
+    std::list<unit> *list_units;
+    std::list<ribStruct> *list_units_ribs;
+    cocos2d::Label* labelTouchInfo;
+    coordinate_X_Y mouse_coords;
+    static HelloWorld* layer;
+    int max;
+    controller* my_controller;
+    client<calcModAdapter, Network>* my_client;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

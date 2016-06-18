@@ -33,12 +33,12 @@ void sector::changeCoordinates(double start_X, double start_Y, double finish_X, 
 }
 
 void sector::createUnit1(int planetNumber){
-    unit newUnit(start.x, start.y, planetNumber);
+    unit newUnit(start.x, start.y, planetNumber, 0);
     (massOfPlayersListsOfUnits[0]).push_back(newUnit);
 }
 
 void sector::createUnit2(int planetNumber){
-    unit newUnit(finish.x, finish.y, planetNumber);
+    unit newUnit(finish.x, finish.y, planetNumber, 1);
     massOfPlayersListsOfUnits[1].push_back(newUnit);
 }
 

@@ -33,31 +33,11 @@ bool HelloWorld::init()
     my_controller = my_client->getContoller();
     
 
-    building_sprite.resize(num_of_buildings);
-    for (int i = 0; i < num_of_buildings; ++i) {
-        building_sprite[i] = new Building_Sprite();
-        building_sprite[i] = Building_Sprite::create();
-    }
+  
 
     set_planets();
     
-    vector<unit> temp = my_client->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
-    num_of_units = temp.size();
-    unit_sprite.resize(num_of_units);
-    for (int i = 0; i < num_of_units; ++i) {
-        unit_sprite[i] = new Unit_Sprite();
-        unit_sprite[i] = Unit_Sprite::create();
-    }
-    int id = 0;
-    while(!temp.empty()){
-        unit temp_unit = temp.back();
-        unit_sprite[id]->set_unit_sprite(&temp.back());
-        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
-        temp.pop_back();
-        this->addChild(unit_sprite[id], kMiddleground, kUnit);
-        ++id;
-    }
+    manage_units();
     player_info.player_num = my_controller->playerNum;
     
   
@@ -71,7 +51,7 @@ bool HelloWorld::init()
     data->ribs = vectOfRibs;
     data->shells = vectorOfShells;
     my_client->calculationMod->setData(data);
-   
+    //draw_shells();
     // вот и конец этому ужасу
     this->scheduleUpdate();
     return true;
@@ -82,7 +62,9 @@ bool HelloWorld::init()
 void HelloWorld::update(float delta){
     while (this->getChildByTag(kUnit)) {
         this->removeChildByTag(kUnit);
-
+    }
+    while (this->getChildByTag(kShell)) {
+        this->removeChildByTag(kShell);
     }
 
     
@@ -90,24 +72,7 @@ void HelloWorld::update(float delta){
 
         
     my_client->doWork();
-    vector<unit> temp = my_client->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
-    num_of_units = temp.size();
-    unit_sprite.resize(num_of_units);
-    for (int i = 0; i < num_of_units; ++i) {
-        unit_sprite[i] = new Unit_Sprite();
-        unit_sprite[i] = Unit_Sprite::create();
-    }
-    int id = 0;
-    while(!temp.empty()){
-        unit temp_unit = temp.back();
-        unit_sprite[id]->set_unit_sprite(&temp.back());
-        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
-        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
-        temp.pop_back();
-        this->addChild(unit_sprite[id], kMiddleground, kUnit);
-        ++id;
-    }
-
+    manage_units();
 
 }
 
@@ -179,7 +144,7 @@ void HelloWorld::Manage_Planets(){
             if((*it)->get_planet()->getOwner() == player_info.player_num){
                 auto button = ui::Button::create("hammer.png", "hammer.png", "hammer.png");
                 player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
-                button->setTitleText("Button Text");
+                //button->setTitleText("Button Text");
                 button->Node::setPosition(0,0);
                 button->cocos2d::Node::setScale(0.7);
                 (*it)->addChild(button, 4, 100);
@@ -194,6 +159,28 @@ void HelloWorld::Manage_Planets(){
                             (*it)->set_touch(false);
                             (*it)->removeAllChildren();
                             
+                            if (!(*it)->is_touched()) {
+                                my_client->calculationMod->createBuilding((*it)->get_planet()->
+                                                                          getNumberOfPlanet(), player_info.player_num );
+                                vector<building> temp = (*it)->get_planet()->getVectorOfBuildings();
+                                num_of_buildings = temp.size();
+                                building_sprite.resize(num_of_buildings);
+                                for (int i = 0; i < num_of_buildings; ++i) {
+                                    building_sprite[i] = new Building_Sprite();
+                                    building_sprite[i] = Building_Sprite::create();
+                                }
+                                int id = 0;
+                                while(!temp.empty()){
+                                    building temp_unit = temp.back();
+                                    building_sprite[id]->set_building_sprite(&temp.back());
+                                    coordinate_X_Y coords = temp_unit.getCoordinate();
+                                    building_sprite[id]->setPosition(Vec2(coords.x, coords.y));
+                                    temp.pop_back();
+                                    this->addChild(building_sprite[id], kMiddleground, kBuilding);
+                                    ++id;
+                                }
+                                
+                            }
                             break;
                         case ui::Widget::TouchEventType::ENDED:
                             break;
@@ -202,7 +189,7 @@ void HelloWorld::Manage_Planets(){
                     }
                 });
                 
-                
+               
                 
             }
             
@@ -262,7 +249,28 @@ void HelloWorld::Manage_Planets(){
     }
 
 }
+void HelloWorld::manage_units(){
+    vector<unit> temp = my_client->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
+    num_of_units = temp.size();
+    unit_sprite.resize(num_of_units);
+    for (int i = 0; i < num_of_units; ++i) {
+        unit_sprite[i] = new Unit_Sprite();
+    }
+    int id = 0;
+    while(!temp.empty()){
+        unit temp_unit = temp.back();
+        int owner = temp_unit.get_owner_num();
+        unit_sprite[id] = Unit_Sprite::create(owner);
+        unit_sprite[id]->set_unit_sprite(&temp.back());
+        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
+        temp.pop_back();
+        this->addChild(unit_sprite[id], kMiddleground, kUnit);
+        ++id;
+    }
 
+    
+}
 void HelloWorld::set_planets(){
     
     planet_sprite.resize(num_of_planetss);
@@ -274,8 +282,9 @@ void HelloWorld::set_planets(){
     vectOfPlanets.push_back(planet(0, 200, 200, 4));
     vectOfPlanets.push_back(planet(1, 1000, 500, 4));
     vectOfPlanets.push_back(planet(2, 350, 700, 4));
-    vectOfPlanets[0].setOwner(0);
-    vectOfPlanets[1].setOwner(1);
+    vectOfPlanets[0].setOwner(1);
+    vectOfPlanets[1].setOwner(0);
+    vectOfPlanets[2].setOwner(1);
     for (int i = 0; i < num_of_planetss; ++i) {
         planet_sprite[i]->set_planet(&vectOfPlanets[i]);
         coordinate_X_Y coords = vectOfPlanets[i].getCoordinates();
@@ -283,7 +292,29 @@ void HelloWorld::set_planets(){
         this->addChild(planet_sprite[i], kMiddleground);
     }
 }
-
+void HelloWorld::draw_shells(){
+//    vector<unit> temp = my_client->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
+//    num_of_units = temp.size();
+//    unit_sprite.resize(num_of_units);
+//    for (int i = 0; i < num_of_units; ++i) {
+//        unit_sprite[i] = new Unit_Sprite();
+//    }
+//    int id = 0;
+//    while(!temp.empty()){
+//        unit temp_unit = temp.back();
+//        int owner = temp_unit.get_owner_num();
+//        unit_sprite[id] = Unit_Sprite::create(owner);
+//        unit_sprite[id]->set_unit_sprite(&temp.back());
+//        coordinate_X_Y coords = temp_unit.get_unit_coordinates();
+//        unit_sprite[id]->setPosition(Vec2(coords.x, coords.y));
+//        temp.pop_back();
+//        this->addChild(unit_sprite[id], kMiddleground, kUnit);
+//        ++id;
+//    }
+    auto node = DrawNode::create();
+    node->drawLine(Vec2(200, 200), Vec2(200, 500), Color4F(1.0, 1.0, 1.0, 1.0));
+    this->addChild(node);
+}
 void HelloWorld::set_background(){
 
     left_button_state = false;

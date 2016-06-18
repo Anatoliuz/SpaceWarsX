@@ -21,8 +21,8 @@ public:
    
     unit* unit_in_sprite;
     
-    static Unit_Sprite *create();
-    void initOptions(Unit_Sprite*);
+    static Unit_Sprite *create(int owner);
+    void initOptions(Unit_Sprite*, int owner);
     void set_unit_sprite(unit* cur_unit);
     unit* get_unit_in_sprite();
     //void set_unit_sprite_from_rib(ribStruct *unit);
