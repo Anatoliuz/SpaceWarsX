@@ -19,7 +19,8 @@ enum {
     kForeground,
     kUnit,
     kBuilding,
-    kShell
+    kShell,
+    kButton
 };
 
 enum {

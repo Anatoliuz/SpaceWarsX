@@ -9,7 +9,8 @@ class shell
 public:
     shell();
     shell(coordinate_X_Y start, coordinate_X_Y finish);
-
+    coordinate_X_Y get_start();
+    coordinate_X_Y get_finish();
 private:
     coordinate_X_Y start;    // Координата начала выстрела
     coordinate_X_Y finish;   // Координата конца выстрела
