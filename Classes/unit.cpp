@@ -32,7 +32,9 @@ unit::unit(double X, double Y, int planetNumber, int owner)
     unit_id++;
     internal_id = unit_id;
     health = 100;
-    speed = 50;
+    
+    speed = 20;
+    
     damage = 35;
     width = 25;
     height = 25;
@@ -41,8 +43,10 @@ unit::unit(double X, double Y, int planetNumber, int owner)
     change = round(900 / speed);
     countChange = 0;
     keyRupture = false;
-    recharge = 5;
-    countRecharge = 5;
+    
+    
+    recharge = 100;
+    countRecharge = 100;
 
     coordinate.x = X;
     coordinate.y = Y;

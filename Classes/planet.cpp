@@ -14,7 +14,7 @@ double planet::get_planet_radius(){
 planet::planet()
 {
     radiusOfPlanet = 100;
-    radiusOfOrbit = 20;
+    radiusOfOrbit = 10;
     coordinate.x = 200;
     coordinate.y = 200;
 }
@@ -29,7 +29,7 @@ planet::planet(int planetNumber, double coord_X, double coord_Y, int numberOfPla
     coordinate.x = coord_X;
     coordinate.y = coord_Y;
     radiusOfPlanet = 100;
-    radiusOfOrbit = 20;
+    radiusOfOrbit = 10;
 
     massOfUnitsCount = new int[numberOfPlayers];
 
@@ -74,18 +74,18 @@ planet::planet(int planetNumber, double coord_X, double coord_Y, int numberOfPla
 
     // Отладочные данные моделирующие тестовую карту
     if (planetNumber == 0){
-     /*   massOfUnitsCount[0] = 5;
+        massOfUnitsCount[0] = 5;
         massOfUnitsCount[1] = 0;
         massOfSectors[0][0].createUnit1(planetNumber);
-        massOfSectors[0][5].createUnit1(planetNumber);
+        massOfSectors[1][5].createUnit1(planetNumber);
       //  massOfSectors[0][3].createUnit2(planetNumber);
 //        massOfSectors[1][3].createUnit2(planetNumber);
         massOfSectors[2][7].createUnit1(planetNumber);
 //        massOfSectors[2][1].createUnit2(planetNumber);
-        massOfSectors[1][4].createUnit1(planetNumber);
-        massOfSectors[1][2].createUnit1(planetNumber);
+        massOfSectors[3][4].createUnit1(planetNumber);
+        massOfSectors[4][2].createUnit1(planetNumber);
 //        massOfSectors[1][6].createUnit2(planetNumber);
-//        massOfUnitsCount[0] = 1;*/
+//        massOfUnitsCount[0] = 1;
 //        massOfSectors[0][1].createUnit1(planetNumber);
 
     }

@@ -56,6 +56,7 @@ public:
     void set_background();
     void update(float) override;
     void draw_buildings_on_planet();
+    void clear_buttons(Planet_Sprite*);
     
     vector<Planet_Sprite*> planet_sprite;
     vector<Unit_Sprite*> unit_sprite;

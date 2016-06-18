@@ -59,7 +59,7 @@ void calculationMod::createBuilding(planet &onePlanet, int playerNumber){
             vectorOfBuildings.push_back(newBuilding);
         }
     }
-    else if (vectorOfBuildings.size() == 0 && !onePlanet.isWar() && onePlanet.getOwner() == playerNumber/* && onePlanet.getUnitsCount(playerNumber) > 0*/)
+    else if (vectorOfBuildings.size() == 0 && !onePlanet.isWar() && ( onePlanet.getOwner() == playerNumber || onePlanet.getUnitsCount(playerNumber) > 0) )
     {
         onePlanet.setOwner(playerNumber);
         coordinate_X_Y coordinate = onePlanet.getCoordinates();

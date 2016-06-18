@@ -37,8 +37,16 @@ bool HelloWorld::init()
   
     vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[1], 4));
     vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[2], 4));
-    vectOfRibs.push_back(rib(vectOfPlanets[1], vectOfPlanets[2], 4));
+    vectOfRibs.push_back(rib(vectOfPlanets[0], vectOfPlanets[3], 4));
 
+    vectOfRibs.push_back(rib(vectOfPlanets[1], vectOfPlanets[3], 4));
+    vectOfRibs.push_back(rib(vectOfPlanets[1], vectOfPlanets[4], 4));
+    vectOfRibs.push_back(rib(vectOfPlanets[2], vectOfPlanets[5], 4));
+    
+    vectOfRibs.push_back(rib(vectOfPlanets[3], vectOfPlanets[4], 4));
+    vectOfRibs.push_back(rib(vectOfPlanets[3], vectOfPlanets[5], 4));
+    vectOfRibs.push_back(rib(vectOfPlanets[4], vectOfPlanets[5], 4));
+    
     // в calcModAdapter вызывыается doStep, который вызывает doStep олега, т.к doStep олега нужны планеты и ребра, то указатель нан их есть в calcModAdapter, но т.к они создаюстя тут, причем создаются вперемешку со спрайтами(т.е отделить в функцию и вынести не варик), тут будет создана структура dataModel и послана в calcModAdapter
     dataModel* data = new dataModel(4, player_info.player_num); // кол-во игроков 4 и номер клиента
     data->planets = &vectOfPlanets;
@@ -61,6 +69,10 @@ void HelloWorld::update(float delta)
     while (this->getChildByTag(kShell)) {
         this->removeChildByTag(kShell);
     }
+    while (this->getChildByTag(kBuilding)) {
+        this->removeChildByTag(kBuilding);
+
+    }
     
     manage_planets();
     draw_buildings_on_planet();        
@@ -68,7 +80,10 @@ void HelloWorld::update(float delta)
     manage_units();
     draw_shells();
 }
-
+void HelloWorld::clear_buttons(Planet_Sprite *temp){
+    temp->removeAllChildren();
+    temp->set_touch(false);
+}
 
 HelloWorld* HelloWorld::get_instance(){
     return layer;
@@ -85,60 +100,69 @@ Planet_Sprite* HelloWorld::get_planet_sprite_by_id(int num_of_planet ){
 }
 
 void HelloWorld::manage_planets(){
-    for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
+for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
+    if((*it)->is_touched()){
+        if( ( (*it)->get_planet()->getOwner() == player_info.player_num || (*it)->get_planet()->getUnitsCount(player_info.player_num) > 0 )
+           && player_info.planetId1 < 0
+                ){
+            
+            player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
+            auto button = ui::Button::create("hammer.png", "hammer.png", "hammer.png");
+            player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
+            button->Node::setPosition(0,0);
+            button->cocos2d::Node::setScale(0.7);
+            (*it)->addChild(button, kForeground, kButton);
+            (*it)->set_touch(false);
 
-        if( (*it)->is_touched() ) {
+            button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
+                switch (type)
+                {
+                    case ui::Widget::TouchEventType::BEGAN:
+                        if  (player_info.planetId2 >= 0){
+                            clear_buttons(get_planet_sprite_by_id(player_info.planetId2));
+                            
+                        }
+                        my_controller->setCommand(player_info.planetId1, -1, 1);
+                        clear_buttons(get_planet_sprite_by_id(player_info.planetId1));
 
-            if((*it)->get_planet()->getOwner() == player_info.player_num){
-                if(player_info.planetId1 < 0){
-                auto button = ui::Button::create("hammer.png", "hammer.png", "hammer.png");
-                player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
-                button->Node::setPosition(0,0);
-                button->cocos2d::Node::setScale(0.7);
-                (*it)->addChild(button, kForeground, kButton);
-                button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
-                    switch (type)
-                    {
-                        case ui::Widget::TouchEventType::BEGAN:
-                            my_controller->setCommand(player_info.planetId1, -1, 1);
-                            player_info.planetId1 = -1;
-                            (*it)->set_touch(false);
-                            (*it)->removeAllChildren();
-
-                                my_controller->setCommand((*it)->get_planet()->getNumberOfPlanet(), 0, 1);
-                                // 0 - любое число, 1 - тип действия, тут 1 - постройка, 1 ый параметр номер планеты где строится
-                                /*
-                                my_client->calculationMod->createBuilding((*it)->get_planet()->
-                                                                          getNumberOfPlanet(), player_info.player_num );//!!!!Не создает здание
-                                */
-
-                                
-                        
-                            break;
-                        case ui::Widget::TouchEventType::ENDED:
-                            break;
-                        default:
-                            break;
-                    }
-                });
+                        player_info.planetId1 = -1;
+                        // 0 - любое число, 1 - тип действия, тут 1 - постройка, 1 ый параметр номер планеты где строится
+                        /*
+                         my_client->calculationMod->createBuilding((*it)->get_planet()->
+                         getNumberOfPlanet(), player_info.player_num );//!!!!Не создает здание
+                         */
+                        break;
+                    case ui::Widget::TouchEventType::ENDED:
+                        break;
+                    default:
+                        break;
                 }
+            });
+        }
+        else {
+            if (player_info.planetId1 < 0) {
+                player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
             }
-            if(player_info.planetId1 >= 0 && (*it)->get_planet()->getNumberOfPlanet() != player_info.planetId1){
+            else {
+                if (!(*it)->getChildByTag(kButton)) {
+                
                 player_info.planetId2 = (*it)->get_planet()->getNumberOfPlanet();
                 auto button = ui::Button::create("attack.png", "attack.png", "attack.png");
                 button->Node::setPosition(0,0);
                 button->cocos2d::Node::setScale(0.7);
                 (*it)->addChild(button, 100, kButton);
-            
+                
                 button->addTouchEventListener([=](Ref* sender, ui::Widget::TouchEventType type){
                     switch (type)
                     {
                         case ui::Widget::TouchEventType::BEGAN:
                             my_controller->setCommand(player_info.planetId1, player_info.planetId2, 2);
+                            clear_buttons(get_planet_sprite_by_id(player_info.planetId1));
+                            clear_buttons(get_planet_sprite_by_id(player_info.planetId2));
+                            
                             player_info.planetId1 = -1;
                             player_info.planetId2 = -1;
-                             (*it)->removeAllChildren();
-                            //(*it)->set_touch(false);
+                    
                             break;
                         case ui::Widget::TouchEventType::ENDED:
                             
@@ -147,25 +171,14 @@ void HelloWorld::manage_planets(){
                             break;
                     }
                 });
-                if (player_info.planetId1 < 0 && player_info.planetId2 < 0){
-                    auto *temp_1 = get_planet_sprite_by_id(player_info.planetId1);
-//                    while (temp_1->getChildByTag(kButton)) {
-//                        temp_1->removeChildByTag(kButton);
-//                        temp_1->set_touch(false);
-//                    }
-                    temp_1->removeAllChildren();
-                    auto *temp_2 = get_planet_sprite_by_id(player_info.planetId2);
-//                    while (temp_2->getChildByTag(kButton)) {
-//                        temp_2->removeChildByTag(kButton);
-//                        temp_2->set_touch(false);
-//                    }
-                }
+              
             }
+            }
+            
         }
     }
 }
-
-
+}
 void HelloWorld::manage_units(){
     vector<unit> temp = my_client->getVectorOfUnits(vectOfPlanets, vectOfRibs, 4);
      int   num_of_units = temp.size();
@@ -191,17 +204,16 @@ void HelloWorld::manage_units(){
 }
 void HelloWorld::set_planets(){
     
-    
-    vectOfPlanets.push_back(planet(0, 200, 300, 4));
-    vectOfPlanets.push_back(planet(1, 700, 300, 4));
-    vectOfPlanets.push_back(planet(2, 1200, 300, 4));
-    vectOfPlanets.push_back(planet(3, 1200, 500, 4));
-
+    vectOfPlanets.push_back(planet(0, 200, 550, 4));
+    vectOfPlanets.push_back(planet(1, 300, 200, 4));
+    vectOfPlanets.push_back(planet(2, 700, 750, 4));
+    vectOfPlanets.push_back(planet(3, 700, 400, 4));
+    vectOfPlanets.push_back(planet(4, 1100, 200, 4));
+    vectOfPlanets.push_back(planet(5, 1200, 550, 4));
     num_of_planets = vectOfPlanets.size();
     vectOfPlanets[0].setOwner(0);
-    vectOfPlanets[1].setOwner(0);
-    vectOfPlanets[2].setOwner(1);
-    vectOfPlanets[3].setOwner(1);
+    vectOfPlanets[5].setOwner(1);
+    
     planet_sprite.resize(num_of_planets);
     for (int i = 0; i < num_of_planets; ++i) {
         planet_sprite[i] = new Planet_Sprite();
@@ -282,10 +294,10 @@ void HelloWorld::draw_buildings_on_planet(){
     }
 }
 
+
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     Director::getInstance()->end();
-    
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
