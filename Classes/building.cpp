@@ -6,8 +6,8 @@ building::building()
 }
 
 building::building(coordinate_X_Y coordinate, int leftArea, int rightArea, int numberOfBuilding){
-    width = 100;
-    height = 100;
+    width = 40;
+    height = 20;
     this->coordinate = coordinate;
     this->leftArea = leftArea;
     this->rightArea = rightArea;

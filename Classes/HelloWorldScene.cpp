@@ -54,6 +54,7 @@ bool HelloWorld::init()
     data->shells = &vectorOfShells;
     my_client->calculationMod->setData(data);
     //draw_shells();
+    draw_ribs();
     // вот и конец этому ужасу
     this->scheduleUpdate();
     return true;
@@ -81,7 +82,8 @@ void HelloWorld::update(float delta)
     draw_shells();
 }
 void HelloWorld::clear_buttons(Planet_Sprite *temp){
-    temp->removeAllChildren();
+    while(temp->getChildByTag(kButton))
+        temp->removeChildByTag(kButton);
     temp->set_touch(false);
 }
 
@@ -268,7 +270,7 @@ void HelloWorld::set_background(){
     _tileMap->initWithTMXFile("untitled.tmx");
     _background = _tileMap->layerNamed("Background");
     
-   // this->addChild(_tileMap);
+    this->addChild(_tileMap);
 }
 
 void HelloWorld::draw_buildings_on_planet(){
@@ -288,13 +290,26 @@ void HelloWorld::draw_buildings_on_planet(){
         coordinate_X_Y coords = temp_unit.getCoordinate();
         building_sprite[id]->setPosition(Vec2(coords.x, coords.y));
         temp.pop_back();
-        this->addChild(building_sprite[id], kBackground, kBuilding);
+        this->addChild(building_sprite[id], kMiddleground, kBuilding);
         ++id;
     }
     }
 }
 
+void HelloWorld::draw_ribs(){
+    for (int i = 0; i < vectOfRibs.size(); ++i) {
+       coordinate_X_Y start =  vectOfPlanets[vectOfRibs[i].getNumb1() ].getCoordinates();
+       coordinate_X_Y  finish  = vectOfPlanets[vectOfRibs[i].getNumb2() ].getCoordinates();
+        Color3B clr = Color3B::MAGENTA;
+        Color4F clrb = Color4F(clr);
+        DrawNode *ln = DrawNode::create();
+        float lineWidth = 0.04 * CC_CONTENT_SCALE_FACTOR();
+        auto node = DrawNode::create();
+        node->drawSegment(Vec2(start.x, start.y), Vec2(finish.x, finish.y), lineWidth,clrb);
+            this->addChild(node, kForeground, kRibs);
 
+    }
+}
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
     Director::getInstance()->end();

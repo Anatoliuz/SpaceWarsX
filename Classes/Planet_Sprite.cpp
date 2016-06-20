@@ -56,8 +56,8 @@ void Planet_Sprite::initOptions(Planet_Sprite* planet_sprite){
     Planet_Sprite myplanet;
     coordinate_X_Y planet_coord = planet_in_sprite->get_planet_coordinates();
     planet_sprite->setPosition(cocos2d::Vec2(planet_coord.x,planet_coord.y));
-    planet_sprite->setScaleX(planet_in_sprite->get_planet_radius()/planet_sprite->getContentSize().width);
-    planet_sprite->setScaleY(planet_in_sprite->get_planet_radius()/planet_sprite->getContentSize().height);
+    planet_sprite->setScaleX(2*planet_in_sprite->get_planet_radius()/planet_sprite->getContentSize().width);
+    planet_sprite->setScaleY(2*planet_in_sprite->get_planet_radius()/planet_sprite->getContentSize().height);
 }
 void Planet_Sprite::set_planet(planet* planet){
     planet_in_sprite = planet;

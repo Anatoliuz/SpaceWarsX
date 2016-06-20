@@ -13,8 +13,8 @@ double planet::get_planet_radius(){
 }
 planet::planet()
 {
-    radiusOfPlanet = 100;
-    radiusOfOrbit = 10;
+    radiusOfPlanet = 80;
+    radiusOfOrbit = 20;
     coordinate.x = 200;
     coordinate.y = 200;
 }
@@ -28,8 +28,8 @@ planet::planet(int planetNumber, double coord_X, double coord_Y, int numberOfPla
 
     coordinate.x = coord_X;
     coordinate.y = coord_Y;
-    radiusOfPlanet = 100;
-    radiusOfOrbit = 10;
+    radiusOfPlanet = 80;
+    radiusOfOrbit = 20;
 
     massOfUnitsCount = new int[numberOfPlayers];
 

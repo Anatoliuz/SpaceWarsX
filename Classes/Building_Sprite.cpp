@@ -27,9 +27,9 @@ void Building_Sprite::initOptions(Building_Sprite* building_sprite){
     coord.x = 0;
     coord.y = 0;
     building *temp = new building(coord, 0, 0, 0);//!!!
-    building_sprite->setScaleX(temp->get_width()/building_sprite->getContentSize().width);
-    building_sprite->setScaleY(temp->get_height()/building_sprite->getContentSize().height);
-    
+    building_sprite->setScaleX(1.2*temp->get_width()/building_sprite->getContentSize().width);
+    building_sprite->setScaleY(1.2*temp->get_height()/building_sprite->getContentSize().height);
+   // building_sprite->setAnchorPoint(ccp(20,0));
     delete temp;
 }
 
