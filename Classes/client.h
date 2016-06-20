@@ -52,7 +52,7 @@ void client<calculationModule, NetWorkModule>::doWork()
     string input  = "";
     string output = "";
     // получаем действие игрока из контролера
-    output = myController -> getAction();// + " doStep ||"; // _com_||
+    output = myController -> getAction();// + " doStep ||"; || _com_ || or|| WIN player0 ||
     // отправляем команду на сервер, даже если пустая, чтобы сервер знал, что с нми все ок
     netModule -> sendCommands(output);    // получаем команды от сервера
     input = "||" + netModule -> getCommandQuery();// + "|| doStep ||"; // ||_com1_||_com2_||
