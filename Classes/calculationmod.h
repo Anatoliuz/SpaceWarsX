@@ -12,6 +12,8 @@ class calculationMod
 {
 public:
     calculationMod();
+    
+    int getNumberOfWiner(vector<planet> &vectorOfPlanets, vector<rib> &vectorOfRibs, int numbOfPlayers);
 
     // Осуществляет все действия необходимые для одного рендера
     void doStep(vector<planet> &vectorOfPlanets, vector<rib> &vectorOfRibs, vector<shell> &vectorOfShells, int numbOfPlayers);

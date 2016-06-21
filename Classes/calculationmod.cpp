@@ -614,3 +614,55 @@ void calculationMod::createOnPlanet(planet &onePlanet){
         }
     }
 }
+
+int calculationMod::getNumberOfWiner(vector<planet> &vectorOfPlanets, vector<rib> &vectorOfRibs, int numbOfPlayers)
+{
+    bool team_0 = false;
+    bool team_1 = false;
+    
+    for (unsigned int i = 0; i < vectorOfPlanets.size(); i++){
+        vector<building> &vectorOfBuildings = (vectorOfPlanets[i]).getVectorOfBuildings();
+        
+        if (vectorOfBuildings.size() > 0){
+            if ((vectorOfPlanets[i]).getOwner() % 2 == 0)
+                team_0 = true;
+            else
+                team_1 = true;
+        }
+        
+        for (int playerNumber = 0; playerNumber < numbOfPlayers; playerNumber++){
+            if ((vectorOfPlanets[i]).getUnitsCount(playerNumber) > 0){
+                if (playerNumber % 2 == 0)
+                    team_0 = true;
+                else
+                    team_1 = true;
+            }
+        }
+        
+        if (team_0 == true && team_1 == true)
+            return -1;
+    }
+    
+    for (unsigned int i = 0; i < vectorOfRibs.size(); i++){
+        list<ribStruct>* massOfPlayersList = (vectorOfRibs[i]).getMassOfPlayersLists();
+        
+        for (int playerNumber = 0; playerNumber < numbOfPlayers; playerNumber++){
+            list<ribStruct> &listOfUnits = massOfPlayersList[playerNumber];
+            
+            if (listOfUnits.size() > 0){
+                if (playerNumber % 2 == 0)
+                    team_0 = true;
+                else
+                    team_1 = true;
+            }
+        }
+        
+        if (team_0 == true && team_1 == true)
+            return -1;
+    }
+    
+    if (team_0 == true)
+        return 0;
+    else
+        return 1;
+}
