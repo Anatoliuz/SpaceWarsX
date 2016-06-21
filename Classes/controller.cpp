@@ -5,7 +5,7 @@
 string commandCreateBuildint (const int& planetId, const int& playerNumber)
 {
     string result = " createBuilding " +
-                std::to_string(planetId1) + // где строится
+                std::to_string(planetId) + // где строится
                 " " +
                 std::to_string(playerNumber) + // номер строителя
                 " ||";

@@ -56,6 +56,8 @@ bool HelloWorld::init()
     //draw_shells();
     draw_ribs();
     // вот и конец этому ужасу
+    
+
     this->scheduleUpdate();
     return true;
 }
@@ -124,7 +126,7 @@ for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
                             clear_buttons(get_planet_sprite_by_id(player_info.planetId2));
                             
                         }
-                        my_controller -> setCreateBuilding(playe_info.planetId1); // контролер знает id игрока, нет нужды передавать
+                        my_controller -> setCreateBuilding(player_info.planetId1); // контролер знает id игрока, нет нужды передавать
                        /* my_controller->setCommand(player_info.planetId1, -1, 1); */
                         clear_buttons(get_planet_sprite_by_id(player_info.planetId1));
 
@@ -159,7 +161,7 @@ for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
                     switch (type)
                     {
                         case ui::Widget::TouchEventType::BEGAN:
-                            my_comntroller -> setMove(player_info.planetId1, playe_info.planetId2, 1); // 1 - количество пересылаемых кораблей если есть откуда их получить то передай переменную.
+                            my_controller -> setMove(player_info.planetId1, player_info.planetId2, 1); // 1 - количество пересылаемых кораблей если есть откуда их получить то передай переменную.
 
 /*                            my_controller->setCommand(player_info.planetId1, player_info.planetId2, 2); */
                             clear_buttons(get_planet_sprite_by_id(player_info.planetId1));

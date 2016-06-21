@@ -578,10 +578,15 @@ void calculationMod::createOnPlanet(planet &onePlanet){
         if (vectorOfBuildings[i].isReadyToCreate()){
             vectorOfBuildings[i].clearCountCreate();
 
+//            list<unit> *massOfPlayersList;
+//            int orbitForCreation = vectorOfBuildings[i].getOrbitForCreation();
+//            coordinate_X_Y coordinate;
+
             list<unit> *massOfPlayersList;
+            vectorOfBuildings[i].changeOrbitForCreation();
             int orbitForCreation = vectorOfBuildings[i].getOrbitForCreation();
             coordinate_X_Y coordinate;
-
+            
             if (onePlanet.getOwner() % 2 == 0){
                 int area = vectorOfBuildings[i].getRightArea();
                 massOfPlayersList = massOfSectors[orbitForCreation][area].getMassOfPlayersLists();
