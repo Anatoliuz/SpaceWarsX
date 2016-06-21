@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <commands.h>
-#include "factory/factory.h"
+#include "factory.h"
 
 using std::vector;
 using std::string;

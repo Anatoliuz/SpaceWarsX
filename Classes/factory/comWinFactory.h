@@ -1,7 +1,7 @@
 #ifndef COMWINFACTORY_H
 #define COMWINFACTORY_H
 
-#include <factory/concreteFabrics.h>
+#include <concreteFabrics.h>
 
 template<class T>
 class comWinFactory : public concreteFactory<T>
@@ -34,6 +34,7 @@ baseCommand<T>* comWinFactory<T>::createCommand (T* r, vector<string>& command)
     assert (command[0] == "Win");
 
     int winnerId = strtoInt(command[1]);
+    
     baseCommand<T>* newcommand = new commandWin<T> (r, &T::Win, winnerId);
     return newcommand;
 }

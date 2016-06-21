@@ -96,6 +96,7 @@ public:
     virtual void onTouchMoved(cocos2d::Touch*, cocos2d::Event*);
     virtual void onTouchCancelled(cocos2d::Touch*, cocos2d::Event*);
  
+    int draw_win();
     
 private:
     int num_of_planets;

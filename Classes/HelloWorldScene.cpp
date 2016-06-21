@@ -82,6 +82,8 @@ void HelloWorld::update(float delta)
     my_client->doWork();
     manage_units();
     draw_shells();
+
+    draw_win();
 }
 void HelloWorld::clear_buttons(Planet_Sprite *temp){
     while(temp->getChildByTag(kButton))
@@ -162,7 +164,7 @@ for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
                     {
                         case ui::Widget::TouchEventType::BEGAN:
                             my_controller -> setMove(player_info.planetId1, player_info.planetId2, 1); // 1 - количество пересылаемых кораблей если есть откуда их получить то передай переменную.
-
+                            
 /*                            my_controller->setCommand(player_info.planetId1, player_info.planetId2, 2); */
                             clear_buttons(get_planet_sprite_by_id(player_info.planetId1));
                             clear_buttons(get_planet_sprite_by_id(player_info.planetId2));
@@ -207,6 +209,24 @@ void HelloWorld::manage_units(){
         ++id;
     }
 
+    
+    
+}
+
+int HelloWorld::draw_win(){
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    Size screenSize = CCDirector::sharedDirector()->getWinSize();
+    Point center = Point(screenSize.width/2 + origin.x, screenSize.height/2 + origin.y);
+    int number =  my_client->getWinner();
+    if(number >= 0){
+        auto label = Label::createWithTTF("Win", "fonts/Marker Felt.ttf", 24);
+        label->setPosition(Vec2(0, 0));
+        label->setScale(10);
+        this->addChild(label, 1);
+        return 0;
+    }
+    else return -1;
     
 }
 void HelloWorld::set_planets(){

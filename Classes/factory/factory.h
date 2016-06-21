@@ -3,7 +3,7 @@
 
 #include <commands.h>
 #include <config.h>
-#include <factory/factories.h>
+#include <factories.h>
 
 // фабрика команд для процессора команд
 

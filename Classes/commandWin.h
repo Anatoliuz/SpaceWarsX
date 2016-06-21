@@ -7,7 +7,7 @@ template<class Receiver>
 class commandWin : public baseCommand<Receiver>
 {
  public:
-    typedef void (Receiver::* Win) ();
+    typedef void (Receiver::* Win) (int x);
     commandWin(Receiver *r_, Win a, int winner);
     bool Execute();
 
