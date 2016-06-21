@@ -2,7 +2,7 @@
 
 // функции создания строк-команд
 //======
-string commandCreateBuildint (const int& planetId, const int& playerNumber)
+string commandCreateBuilding (const int& planetId, const int& playerNumber)
 {
     string result = " createBuilding " +
                 std::to_string(planetId) + // где строится
@@ -53,10 +53,10 @@ string controller::getAction()
 {
     string result;
 
-    switch (action)
+    switch (action){
         case CREATE_BUILDING:
             if (planetId1 >= 0) {
-                result = commandCreateBuildint(planetId1, playerNum);
+                result = commandCreateBuilding(planetId1, playerNum);
                 reset(); // т.к действие обработано, надо его обнулить
               //  return result;
             }
@@ -71,6 +71,7 @@ string controller::getAction()
             result = commandWin(playerNum);
             reset();
             break;
+    }
     return result;
 }
 

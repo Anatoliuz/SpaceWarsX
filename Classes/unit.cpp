@@ -36,8 +36,8 @@ unit::unit(double X, double Y, int planetNumber, int owner)
     speed = 20;
     
     damage = 35;
-    width = 25;
-    height = 25;
+    width = 15;
+    height = 15;
     currentPlanet = planetNumber;
     transportationStatus = -1;
     change = round(900 / speed);
