@@ -67,7 +67,9 @@ HEADERS += \
     command/commandmove.h \
     command/commandProcessor.h \
     command/commands.h \
-    controller.h
+    controller.h \
+    commandWin.h \
+    factory/comWinFactory.h
 
 LIBS += -LC:/boost/lib\
 -lboost_iostreams\

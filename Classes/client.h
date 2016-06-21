@@ -20,6 +20,7 @@ class client
     ~client();
     void doWork();
     controller* getContoller();
+    int getWinner();
     vector<unit> getVectorOfUnits(vector<planet> vectorOfPlanets, vector<rib> vectorOfRibs, int numbOfPlayers);
     calculationModule* calculationMod;
  private:
@@ -43,6 +44,12 @@ controller* client<calculationModule, NetWorkModule>::getContoller()
     return myController;
 }
 
+template<class calculationModule, class NetWorkModule>
+int client<calculationModule, NetWorkModule>::getWinner()
+{
+    return calculationMod -> getWinner();
+}
+
 
 template<class calculationModule, class NetWorkModule>
 void client<calculationModule, NetWorkModule>::doWork()
@@ -58,8 +65,9 @@ void client<calculationModule, NetWorkModule>::doWork()
     input = "||" + netModule -> getCommandQuery();// + "|| doStep ||"; // ||_com1_||_com2_||
     processor -> pushCommands(input); // кладем их в процессор команд
     processor -> doCommands(); // выполянем команды
- 
+    calculationMod -> getWinner();
 }
+
 
 template<class calculationModule, class NetWorkModule>
 client<calculationModule, NetWorkModule>::~client()

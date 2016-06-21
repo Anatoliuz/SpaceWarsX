@@ -1,9 +1,11 @@
-//#include <cstddef>
-//#include <Network.h>
-//#include <client.h>
-//#include <calcModAdapter.h>
+#include <cstddef>
+#include <Network.h>
+#include <client.h>
+#include <calcModAdapter.h>
 //
-//#include <controller.h>
+
+#include <commandWin.h>
+#include <controller.h>
 //
 //class A
 //{
@@ -32,10 +34,10 @@
 //    getline(cin, temp);
 //    return temp;
 //}
-//
-//int main()
-//{
-// //   client<calcModAdapter, Network> client;
+
+int main()
+{
+  // client<calcModAdapter, Network> client;
 //  //  client.doWork();
 //
 //    controller* cont = new controller();
@@ -47,5 +49,5 @@
 //
 //    cout << cont -> getAction();
 //
-//    return 0;
-//}
+    return 0;
+}

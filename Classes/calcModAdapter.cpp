@@ -33,6 +33,19 @@ calcModAdapter::calcModAdapter(int playerNumber)
     if(PRINTONSCREEN) cout << "calcModAdapter()\n";
 }
 
+int calcModAdapter::getWinner()
+{
+    //int getNumberOfWiner(vector<planet> &vectorOfPlanets, vector<rib> &vectorOfRibs, int numbOfPlayers);
+    data -> winnerId = calcMod -> getNumberOfWiner(*(data -> planets), *(data -> ribs), 2); // 2 - захардкоденное кол-во игроков
+    return data -> winnerId;
+}
+
+void calcModAdapter::Win(int winner)
+{
+    cout << "\n Win " << winner << "\n";
+    data -> winnerId = winner; // обозначили победителя, клиет проверит и что-то сделает
+    //
+}
 
 void calcModAdapter::createBuilding (int planetId, int playerId)
 {

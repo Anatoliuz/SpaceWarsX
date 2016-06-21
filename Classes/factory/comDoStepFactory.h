@@ -1,7 +1,7 @@
 #ifndef COMDOSTEPFACTORY_H
 #define COMDOSTEPFACTORY_H
 
-#include <concreteFabrics.h>
+#include <factory/concreteFabrics.h>
 
 template<class T>
 class comDoStepFactory : public concreteFactory<T>

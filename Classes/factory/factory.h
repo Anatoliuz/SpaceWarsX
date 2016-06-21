@@ -3,7 +3,7 @@
 
 #include <commands.h>
 #include <config.h>
-#include <factories.h>
+#include <factory/factories.h>
 
 // фабрика команд для процессора команд
 
@@ -37,12 +37,13 @@ template<class Receiver>
 CommandFactory<Receiver>::CommandFactory(Receiver* r_)
 {
    r = r_;
-   sizeFactory = 3; // кол-во фабрик               конкретными фабриками
+   sizeFactory = 4; // кол-во фабрик               конкретными фабриками
     
    factories = new concreteFactory<Receiver>*[sizeFactory](); // заполнение абстрактной фабрики
    factories[0] = new comMoveFactory<Receiver>          ("move");
    factories[1] = new comDoStepFactory<Receiver>        ("doStep");
    factories[2] = new comCreateBuildingFactory<Receiver>("createBuilding");
+   factories[3] = new comWinFactory<Receiver>("Win");
    if(PRINTONSCREEN) cout << "abstractCommandFactory()\n";
 }
 

@@ -5,5 +5,6 @@
 #include <commandmove.h>
 #include <commandDoStep.h>
 #include <commandCreateBuilding.h>
+#include <commandWin.h>
 
 #endif // COMMANDS_H

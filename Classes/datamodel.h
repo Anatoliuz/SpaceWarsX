@@ -16,6 +16,7 @@ struct dataModel
     vector<rib>*    ribs;
     vector<shell>*  shells;
     int numberOfPlayers;
+    int winnerId;
     int playerId;
 
 };

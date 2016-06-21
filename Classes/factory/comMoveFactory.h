@@ -1,7 +1,7 @@
 #ifndef COMMOVEFACTORY_H
 #define COMMOVEFACTORY_H
 
-#include <concreteFabrics.h>
+#include <factory/concreteFabrics.h>
 
 //==================comMoveFactory============================================
 
