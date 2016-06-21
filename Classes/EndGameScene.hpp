@@ -11,12 +11,12 @@
 
 
 
-#include "cocos2d.h"
+#include "AppDelegate.h"
 
-class EndGameScene : public cocos2d::Layer
+class EndGameScene : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene* createScene();
+    static cocos2d::Scene* createScene(bool);
     
     virtual bool init();
     
@@ -25,6 +25,8 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(EndGameScene);
+private:
+    static bool is_win;
 };
 
 

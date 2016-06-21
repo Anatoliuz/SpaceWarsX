@@ -8,11 +8,12 @@
 
 #include "EndGameScene.hpp"
 
-
+bool EndGameScene::is_win;
 USING_NS_CC;
 
-Scene* EndGameScene::createScene()
+Scene* EndGameScene::createScene(bool num)
 {
+    is_win = num;
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
@@ -31,7 +32,7 @@ bool EndGameScene::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !Layer::init() )
+    if ( !Scene::init() )
     {
         return false;
     }
@@ -63,7 +64,7 @@ bool EndGameScene::init()
     // add a label shows "Hello World"
     // create and initialize a label
     
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+    auto label = Label::createWithTTF("End Game", "fonts/Marker Felt.ttf", 24);
     
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
@@ -73,13 +74,19 @@ bool EndGameScene::init()
     this->addChild(label, 1);
     
     // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    
+    if(is_win){
+       auto sprite = Sprite::create("victory.png");
+        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+        this->addChild(sprite, 0);
+    }
+    else{
+        auto sprite = Sprite::create("defeat.png");
+        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+        this->addChild(sprite, 0);
+    }
     // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
     
     // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
     
     return true;
 }
@@ -93,3 +100,5 @@ void EndGameScene::menuCloseCallback(Ref* pSender)
     exit(0);
 #endif
 }
+
+

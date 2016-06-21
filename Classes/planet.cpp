@@ -74,33 +74,23 @@ planet::planet(int planetNumber, double coord_X, double coord_Y, int numberOfPla
 
     // Отладочные данные моделирующие тестовую карту
     if (planetNumber == 0){
-        massOfUnitsCount[0] = 5;
-        massOfUnitsCount[1] = 0;
-        massOfSectors[0][0].createUnit1(planetNumber);
-        massOfSectors[1][5].createUnit1(planetNumber);
-      //  massOfSectors[0][3].createUnit2(planetNumber);
-//        massOfSectors[1][3].createUnit2(planetNumber);
-        massOfSectors[2][7].createUnit1(planetNumber);
-//        massOfSectors[2][1].createUnit2(planetNumber);
-        massOfSectors[3][4].createUnit1(planetNumber);
-        massOfSectors[4][2].createUnit1(planetNumber);
-//        massOfSectors[1][6].createUnit2(planetNumber);
-//        massOfUnitsCount[0] = 1;
-//        massOfSectors[0][1].createUnit1(planetNumber);
+        massOfUnitsCount[0] = 1;
+        massOfSectors[0][6].createUnit1(planetNumber);
 
     }
     else if (planetNumber == 1){
-    //    massOfUnitsCount[0] = 1;
-    //    massOfSectors[0][6].createUnit1(planetNumber);
+//        massOfUnitsCount[0] = 1;
+//        massOfSectors[0][6].createUnit1(planetNumber);
     }
     else if (planetNumber == 2){
      //   massOfUnitsCount[1] = 1;
     //    massOfSectors[0][1].createUnit2(planetNumber);
     }
-    else if(planetNumber == 3){
-     //   massOfUnitsCount[1] = 1;
-     //   massOfSectors[0][1].createUnit2(planetNumber);
+    else if(planetNumber == 5){
+        massOfUnitsCount[1] = 1;
+        massOfSectors[0][1].createUnit2(planetNumber);
     }
+ 
 }
 
 bool planet::isWar(){

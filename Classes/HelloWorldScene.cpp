@@ -1,5 +1,5 @@
 #include "HelloWorldScene.h"
-
+#include "EndGameScene.hpp"
 USING_NS_CC;
 
 
@@ -66,6 +66,8 @@ bool HelloWorld::init()
 //delta позволяет  сгладить  движения объектов в loop'e
 void HelloWorld::update(float delta)
 {
+    
+
     while (this->getChildByTag(kUnit)) {
         this->removeChildByTag(kUnit);
     }
@@ -214,20 +216,19 @@ void HelloWorld::manage_units(){
 }
 
 int HelloWorld::draw_win(){
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    Size screenSize = CCDirector::sharedDirector()->getWinSize();
-    Point center = Point(screenSize.width/2 + origin.x, screenSize.height/2 + origin.y);
     int number =  my_client->getWinner();
-    if(number >= 0){
-        auto label = Label::createWithTTF("Win", "fonts/Marker Felt.ttf", 24);
-        label->setPosition(Vec2(0, 0));
-        label->setScale(10);
-        this->addChild(label, 1);
-        return 0;
+    if(number >= 0) {
+    if(number == player_info.player_num  ){
+        auto sc = EndGameScene::createScene(true);
+        Director::getInstance()->pushScene(sc);
     }
-    else return -1;
-    
+
+    else {
+        auto sc = EndGameScene::createScene(false);
+        Director::getInstance()->pushScene(sc);
+    }
+
+    }
 }
 void HelloWorld::set_planets(){
     
