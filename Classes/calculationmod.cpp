@@ -573,8 +573,9 @@ void calculationMod::createAllUnits(vector<planet> &vectorOfPlanets){
 void calculationMod::createOnPlanet(planet &onePlanet){
     sector **massOfSectors = onePlanet.getMassOfSectors();
     vector<building> &vectorOfBuildings = onePlanet.getVectorOfBuildings();
-
+    // Если количество юнитов больше 20, то юниты не воспроизводятся
     for (unsigned int i = 0; i < vectorOfBuildings.size(); i++){
+        if (onePlanet.getUnitsCount(onePlanet.getOwner()) < 20){
         if (vectorOfBuildings[i].isReadyToCreate()){
             vectorOfBuildings[i].clearCountCreate();
 
@@ -611,6 +612,7 @@ void calculationMod::createOnPlanet(planet &onePlanet){
         {
             vectorOfBuildings[i].incrementCountCreate();
             cout << "Игнор" << "Жизни - " << vectorOfBuildings[i].getHealth() << "\n";          // Для отладки
+        }
         }
     }
 }
