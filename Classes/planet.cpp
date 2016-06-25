@@ -31,7 +31,7 @@ planet::planet(int planetNumber, double coord_X, double coord_Y, int numberOfPla
     radiusOfPlanet = 80;
     radiusOfOrbit = 20;
 
-    massOfUnitsCount = new int[numberOfPlayers];
+    massOfUnitsCount = new int[numberOfPlayers]();
 
     double straightLine = radiusOfPlanet - radiusOfOrbit / 2;
     double diagonal = straightLine / sqrt(2);
