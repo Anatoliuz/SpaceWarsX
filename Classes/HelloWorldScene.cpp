@@ -115,6 +115,7 @@ for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
                 ){
             
             player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
+            units_count = (*it)->get_planet()->getUnitsCount(player_info.player_num);
             auto button = ui::Button::create("hammer.png", "hammer.png", "hammer.png");
             player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
             button->Node::setPosition(0,0);
@@ -151,6 +152,7 @@ for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
         else {
             if (player_info.planetId1 < 0) {
                 player_info.planetId1 = (*it)->get_planet()->getNumberOfPlanet();
+                units_count = (*it)->get_planet()->getUnitsCount(player_info.player_num);
             }
             else {
                 if (!(*it)->getChildByTag(kButton)) {
@@ -165,7 +167,8 @@ for (auto it = planet_sprite.begin(); it < planet_sprite.end(); ++it) {
                     switch (type)
                     {
                         case ui::Widget::TouchEventType::BEGAN:
-                            my_controller -> setMove(player_info.planetId1, player_info.planetId2, 1); // 1 - количество пересылаемых кораблей если есть откуда их получить то передай переменную.
+                            
+                            my_controller -> setMove(player_info.planetId1, player_info.planetId2, units_count); // 1 - количество пересылаемых кораблей если есть откуда их получить то передай переменную.
                             
 /*                            my_controller->setCommand(player_info.planetId1, player_info.planetId2, 2); */
                             clear_buttons(get_planet_sprite_by_id(player_info.planetId1));
@@ -219,13 +222,18 @@ int HelloWorld::draw_win(){
     int number =  my_client->getWinner();
     if(number >= 0) {
     if(number == player_info.player_num  ){
-        auto sc = EndGameScene::createScene(true);
-        Director::getInstance()->pushScene(sc);
+        
+            auto sc = EndGameScene::createScene(true);
+            Director::getInstance()->pushScene(sc);
+        
     }
 
     else {
-        auto sc = EndGameScene::createScene(false);
-        Director::getInstance()->pushScene(sc);
+        
+
+            auto sc = EndGameScene::createScene(false);
+            Director::getInstance()->pushScene(sc);
+        
     }
 
     }

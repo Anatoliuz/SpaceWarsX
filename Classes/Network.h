@@ -3,7 +3,7 @@
 #include "boost/asio.hpp"
 #define SERVER_DOMEN "spacewarsx.ddns.net"
 #define SERVER_PORT 2002//server port
-#define SERVER_IP "37.204.12.12"
+#define SERVER_IP "172.16.53.158"
 using boost::asio::ip::tcp;
 
 class Network {

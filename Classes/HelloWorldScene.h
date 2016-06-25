@@ -99,6 +99,8 @@ public:
     int draw_win();
     
 private:
+    int units_count;
+
     int num_of_planets;
     std::list<unit> *list_units;
     std::list<ribStruct> *list_units_ribs;

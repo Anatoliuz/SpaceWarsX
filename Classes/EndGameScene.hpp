@@ -16,6 +16,7 @@
 class EndGameScene : public cocos2d::Scene
 {
 public:
+    int count;
     static cocos2d::Scene* createScene(bool);
     
     virtual bool init();
